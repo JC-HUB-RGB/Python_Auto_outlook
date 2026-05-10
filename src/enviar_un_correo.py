@@ -17,6 +17,30 @@ hoja.Cells.Replace(What="Golden Moon Transport Inc //Only Wire or RTP",Replaceme
                 LookAt=2, 
                 SearchOrder=1, 
                 MatchCase=False)
+hoja.Cells.Replace(What="MBM Global Inc (RTP Only)",Replacement="MBM Global Inc", 
+                LookAt=2, 
+                SearchOrder=1, 
+                MatchCase=False)
+hoja.Cells.Replace(What="Gholia Logistics Inc (NO ACH FEE)",Replacement="Gholia Logistics Inc", 
+                LookAt=2, 
+                SearchOrder=1, 
+                MatchCase=False)
+""" hoja.Cells.Replace(What="Golden Moon Transport Inc //Only Wire or RTP",Replacement="Golden Moon Transport Inc", 
+                LookAt=2, 
+                SearchOrder=1, 
+                MatchCase=False)
+hoja.Cells.Replace(What="Golden Moon Transport Inc //Only Wire or RTP",Replacement="Golden Moon Transport Inc", 
+                LookAt=2, 
+                SearchOrder=1, 
+                MatchCase=False)
+hoja.Cells.Replace(What="Golden Moon Transport Inc //Only Wire or RTP",Replacement="Golden Moon Transport Inc", 
+                LookAt=2, 
+                SearchOrder=1, 
+                MatchCase=False)
+hoja.Cells.Replace(What="Golden Moon Transport Inc //Only Wire or RTP",Replacement="Golden Moon Transport Inc", 
+                LookAt=2, 
+                SearchOrder=1, 
+                MatchCase=False) """
 
 #Armador de correos
 
