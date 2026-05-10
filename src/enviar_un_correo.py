@@ -1,3 +1,5 @@
+# SETUPPP
+
 import win32com.client as win32
 import os
 import glob
@@ -8,12 +10,15 @@ ruta_data = os.path.join(directorio_actual,"..","data","ECS_Factoring_NOARecdDat
 libro = excel.Workbooks.Open(ruta_data)
 hoja = libro.Sheets('ECS_Factoring_NOARecdDate')
 ultima_fila = hoja.Cells(hoja.Rows.Count, 1).End(-4162).Row
+
+# Reemplazar nombres específicos
+
 hoja.Cells.Replace(What="Golden Moon Transport Inc //Only Wire or RTP",Replacement="Golden Moon Transport Inc", 
                 LookAt=2, 
                 SearchOrder=1, 
                 MatchCase=False)
 
-#Todas 
+#Armador de correos
 
 for fila in range(456, ultima_fila + 1):
     
@@ -35,10 +40,11 @@ for fila in range(456, ultima_fila + 1):
     ' Please confirm when received.<br><br><br>Thank you and have a great day!,' \
     ' 🙂<br><br><br>*Please note if you are seeing this message again, it is because we have not received confirmation.'
 
+#Seleccionador de correos con fallos adjuntando archivos
     ruta_adjunto = os.path.join(directorio_actual,"..","attachments",f"{dato_nombre}* - NOA.pdf")
     coincidencias = glob.glob(ruta_adjunto)
-
     if coincidencias:
+
         # SI SE ENCUENTRA EL ARCHIVO
         ruta_final = coincidencias[0]
         correo.Attachments.Add(ruta_final)
@@ -51,8 +57,13 @@ for fila in range(456, ultima_fila + 1):
     
 
 # Pausa de seguridad
-    confirmacion = input("Presiona ENTER para enviar este correo o escribe 's' para saltarlo: ")
-    
-    if confirmacion.lower() == 's':
-        print(f"Fila {fila} saltada por el usuario.")
-        continue
+    print(f"\n--- Opciones para la fila {fila} ---")
+    confirmacion = input("Presiona ENTER para enviar, 's' para saltar esta fila, o 'q' para salir de todo: ").lower()
+
+    if confirmacion == 's':
+        print(f"⏩ Fila {fila} saltada por el usuario.")
+        continue  # Pasa a la siguiente fila del Excel
+
+    elif confirmacion == 'q':
+        print("🛑 Deteniendo el proceso por completo...")
+        break  # Sale del bucle for inmediatamente
