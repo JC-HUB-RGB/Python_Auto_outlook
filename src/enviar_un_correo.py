@@ -60,9 +60,9 @@ for fila in range(456, ultima_fila + 1):
     correo = outlook.CreateItem(0)
     correo.To = dato_correo
     correo.Subject = 'PLEASE REPLY NOA confirmation required Carrier ' + dato_nombre + ' // MC ' + dato_MC + ' // Load ' + dato_PO
-    correo.HTMLBody = 'Good morning,<br><br><br>Attached you will find our NOA for the carrier.,' \
-    ' Please confirm when received.<br><br><br>Thank you and have a great day!,' \
-    ' 🙂<br><br><br>*Please note if you are seeing this message again, it is because we have not received confirmation.'
+    correo.HTMLBody = """Good morning,<br><br><br>Attached you will find our NOA for the carrier.
+        Please confirm when received.<br><br><br>Thank you and have a great day!
+        🙂<br><br><br>*Please note if you are seeing this message again, it is because we have not received confirmation."""
 
 #Seleccionador de correos con fallos adjuntando archivos
     ruta_adjunto = os.path.join(directorio_actual,"..","attachments",f"{dato_nombre}* - NOA.pdf")
@@ -73,13 +73,14 @@ for fila in range(456, ultima_fila + 1):
         ruta_final = coincidencias[0]
         correo.Attachments.Add(ruta_final)
         print(f"✅ Archivo encontrado para {dato_nombre}. Enviando automáticamente...")
-        correo.Send() 
+        correo.Send()
+        
     else:
         # NO SE ENCUENTRA EL ARCHIVO
         print(f"⚠️ No se encontró archivo para {dato_nombre}. Mostrando correo para revisión manual.")
         correo.Display() # Abre la ventana de Outlook para que tú lo manejes
     
-
+    
 # Pausa de seguridad
     print(f"\n--- Opciones para la fila {fila} ---")
     confirmacion = input("Presiona ENTER para enviar, 's' para saltar esta fila, o 'q' para salir de todo: ").lower()
