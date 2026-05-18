@@ -1,94 +1,98 @@
-# SETUPPP
+"""SETUPPP"""
 
 import win32com.client as win32
+import pandas as pd
+import openpyxl
 import os
-import glob
-directorio_actual = os.path.dirname(__file__)
+from datetime import date
+
+
+"""Info general"""
 outlook = win32.Dispatch('outlook.application')
-excel = win32.Dispatch('Excel.Application')
-ruta_data = os.path.join(directorio_actual,"..","data","ECS_Factoring_NOARecdDate 5-01-26.xlsx")
-libro = excel.Workbooks.Open(ruta_data)
-hoja = libro.Sheets('ECS_Factoring_NOARecdDate')
-ultima_fila = hoja.Cells(hoja.Rows.Count, 1).End(-4162).Row
+directorio_actual = os.path.dirname(__file__)
+hoy = date.today()
+fecha_formateada = hoy.strftime("%m-%d-%y")
+fecha_ayer = hoy - pd.Timedelta(days=1)
+fecha_ayer = fecha_ayer.strftime("%m-%d-%y")
+df_columns_to_drop = ['NOA Rec Date', 'NOA Assigment', 'NOA Sent', 'NOA Sent User','Debtor NOA Document','CSR.1', 'Office','Notice', 'Notice Contact Email','NOA Entered Date', 'Last Inv Date', 'Last Inv #', 'First Inv Date', 'Relationship Age', 'First Funded', 'Client Age', 'Funded Balance', 'Non Funded Balance']
 
-# Reemplazar nombres específicos
 
-hoja.Cells.Replace(What="Golden Moon Transport Inc //Only Wire or RTP",Replacement="Golden Moon Transport Inc", 
-                LookAt=2, 
-                SearchOrder=1, 
-                MatchCase=False)
-hoja.Cells.Replace(What="MBM Global Inc (RTP Only)",Replacement="MBM Global Inc", 
-                LookAt=2, 
-                SearchOrder=1, 
-                MatchCase=False)
-hoja.Cells.Replace(What="Gholia Logistics Inc (NO ACH FEE)",Replacement="Gholia Logistics Inc", 
-                LookAt=2, 
-                SearchOrder=1, 
-                MatchCase=False)
-""" hoja.Cells.Replace(What="Golden Moon Transport Inc //Only Wire or RTP",Replacement="Golden Moon Transport Inc", 
-                LookAt=2, 
-                SearchOrder=1, 
-                MatchCase=False)
-hoja.Cells.Replace(What="Golden Moon Transport Inc //Only Wire or RTP",Replacement="Golden Moon Transport Inc", 
-                LookAt=2, 
-                SearchOrder=1, 
-                MatchCase=False)
-hoja.Cells.Replace(What="Golden Moon Transport Inc //Only Wire or RTP",Replacement="Golden Moon Transport Inc", 
-                LookAt=2, 
-                SearchOrder=1, 
-                MatchCase=False)
-hoja.Cells.Replace(What="Golden Moon Transport Inc //Only Wire or RTP",Replacement="Golden Moon Transport Inc", 
-                LookAt=2, 
-                SearchOrder=1, 
-                MatchCase=False) """
+"""Ruta Archivo Nuevo"""
 
-#Armador de correos
+ruta_df1 = os.path.join(directorio_actual,"..","data",fecha_formateada+"_ECS_Factoring_NOARecdDate" ".xlsx")
+#print(ruta_df1)
 
-for fila in range(456, ultima_fila + 1):
-    
-    
-    if hoja.Rows(fila).EntireRow.Hidden:
-        print(f"Saltando la fila {fila} porque está oculta...")
-        continue         
-    
-    dato_nombre = str(hoja.Cells(fila, 2).Value).strip()
-    dato_correo = "cokeklo.delarosa@gmail.com"
-    #dato_correo = str(hoja.Cells(fila, 8).Value).strip()
-    dato_PO = str(hoja.Cells(fila, 10).Value).strip()
-    dato_MC = str(hoja.Cells(fila, 3).Value).strip()
-    print(f"Enviando correo a: {dato_nombre} ({dato_correo})")
-    correo = outlook.CreateItem(0)
-    correo.To = dato_correo
-    correo.Subject = 'PLEASE REPLY NOA confirmation required Carrier ' + dato_nombre + ' // MC ' + dato_MC + ' // Load ' + dato_PO
-    correo.HTMLBody = """Good morning,<br><br><br>Attached you will find our NOA for the carrier.
-        Please confirm when received.<br><br><br>Thank you and have a great day!
-        🙂<br><br><br>*Please note if you are seeing this message again, it is because we have not received confirmation."""
 
-#Seleccionador de correos con fallos adjuntando archivos
-    ruta_adjunto = os.path.join(directorio_actual,"..","attachments",f"{dato_nombre}* - NOA.pdf")
-    coincidencias = glob.glob(ruta_adjunto)
-    if coincidencias:
+"""Ruta Archivo Anterior"""
 
-        # SI SE ENCUENTRA EL ARCHIVO
-        ruta_final = coincidencias[0]
-        correo.Attachments.Add(ruta_final)
-        print(f"✅ Archivo encontrado para {dato_nombre}. Enviando automáticamente...")
-        correo.Send()
+ruta_df2 = os.path.join(directorio_actual,"..","data",fecha_ayer+"_ECS_Factoring_NOARecdDate" ".xlsx")
+#print(ruta_df2)
+
+
+"""Limpieza de datos"""
+
+try:
+    df_hoy = pd.read_excel(ruta_df1)
+    df_ayer = pd.read_excel(ruta_df2)
+except Exception as e:
+    print(f"Error al leer los archivos Excel: {e}")
+    exit(1)
+else:
+    print("Archivos Excel leídos correctamente.")
+    df_hoy.drop(columns=df_columns_to_drop, axis='columns', inplace=True, errors='ignore')
+    print("Columnas eliminadas")
+
+try:
+        df_hoy.insert(9, 'CA NOTES', '')
+        print("Columna 'CA NOTES' insertada")
+        df_hoy.to_excel(ruta_df1, index=False)
+        #print(df_hoy.head())
+except ValueError as e:
+        Error_Cachado = 'Columna ya existe'
+except Exception as e:
+        Error_Cachado = 'Error inesperado'
+finally:
+        """Buscar y reemplazar texto específico en la hoja de Excel"""
+
+        df_hoy.replace(to_replace="Golden Moon Transport Inc //Only Wire or RTP", value="Golden Moon Transport Inc", inplace=True, regex=False)
+        df_hoy.replace(to_replace="MBM Global Inc (RTP Only)", value="MBM Global Inc", inplace=True, regex=False)
+        df_hoy.replace(to_replace="Gholia Logistics Inc (NO ACH FEE)", value="Gholia Logistics Inc", inplace=True, regex=False)
+        df_hoy.replace(to_replace="Debtors@englandlogistics.com", value=" ", inplace=True, regex=False)
+        df_hoy.replace(to_replace="paperwork@englandlogistics.com", value=" ", inplace=True, regex=False)
+        df_hoy.replace(to_replace="PS#  inquiries@fusiontransport.com ", value="noa@fusiontransport.com", inplace=True, regex=False)
+        df_hoy.replace(to_replace="PS:carrierinquiries@challenger.com", value="noa@fusiontransport.com", inplace=True, regex=False)
+        df_hoy.replace(to_replace="quickpay@uslfreight.com PS-ap@uslfreight.com TRIUM", value="NOAs:uslogisticsllc@noa.triumphpay.com", inplace=True, regex=False)
+        df_hoy.replace(to_replace="PS Triumph: (469) 312-7222", value="Paullog@noa.triumphpay.com", inplace=True, regex=False)
+        df_hoy.replace(to_replace="NOA transplacetx@noa.triumphpay.com", value="transplacestuttgart@noa.triumphpay.com", inplace=True, regex=False)
+        df_hoy.replace(to_replace="Classic Freight Transportation Inc (NO ACH FEE)", value="Classic Freight Transportation Inc", inplace=True, regex=False)
+        df_hoy.replace(to_replace="Dhillon Bros Carrier LLC (RTP Only)", value="Dhillon Bros Carrier LLC", inplace=True, regex=False)
+        df_hoy.to_excel(ruta_df1, index=False)
+
+        print("Reemplazo de texto específico completado y archivo guardado.")
+
+        if Error_Cachado == 'Columna ya existe':
+            print("La columna 'CA NOTES' ya existe. Continuando con el proceso...")
         
-    else:
-        # NO SE ENCUENTRA EL ARCHIVO
-        print(f"⚠️ No se encontró archivo para {dato_nombre}. Mostrando correo para revisión manual.")
-        correo.Display() # Abre la ventana de Outlook para que tú lo manejes
-    
-    
-# Pausa de seguridad
-    print(f"\n--- Opciones para la fila {fila} ---")
-    confirmacion = input("Presiona ENTER para enviar, 's' para saltar esta fila, o 'q' para salir de todo: ").lower()
+        elif Error_Cachado == 'Error inesperado':
+            print(f"Ocurrió un error inesperado: {e}")
+        else:
+            print("Proceso completado sin errores.")
 
-    if confirmacion == 's':
-        print(f"⏩ Fila {fila} saltada por el usuario.")
-        continue  # Pasa a la siguiente fila del Excel
+try:
+    df_trabajo = pd.merge(df_ayer, df_hoy, on='CA NOTES', how='right')
+    print("Merge realizado correctamente.")
+    df_hoy.to_excel(ruta_df1, index=False)
 
-    elif confirmacion == 'q':
-        print("🛑 Deteniendo el proceso por completo...")
-        break  # Sale del bucle for inmediatamente
+except Exception as e:
+        print(f"Error al realizar el merge: {e}")
+
+
+
+
+
+
+
+            
+    
+
+
