@@ -16,11 +16,7 @@ fecha_formateada = hoy.strftime("%m-%d-%y")
 fecha_ayer = hoy - pd.Timedelta(days=1)
 fecha_ayer = fecha_ayer.strftime("%m-%d-%y")
 df_columns_to_drop = ['NOA Rec Date', 'NOA Assigment', 'NOA Sent', 'NOA Sent User','Debtor NOA Document','CSR.1', 'Office','Notice', 'Notice Contact Email','NOA Entered Date', 'Last Inv Date', 'Last Inv #', 'First Inv Date', 'Relationship Age', 'First Funded', 'Client Age', 'Funded Balance', 'Non Funded Balance']
-Ruta_nube = "C:\\Users\\cokek\\OneDrive - C.R. England\\Documents\\"+fecha_formateada +"_ECS_Factoring_NOARecdDate.xlsx"
-
-
-
-RUTA_LOCAL = os.path.join(directorio_actual,"..","data")
+Ruta_nube = r"C:\\Users\\cokek\\OneDrive - C.R. England\\Documents\\Copias_Limpias_NOA\\"+fecha_formateada +"_ECS_Factoring_NOARecdDate.xlsx"
 
 """Ruta Archivo Nuevo"""
 
@@ -49,19 +45,21 @@ except Exception as e:
 """"Adaptacion del df_hoy: eliminar columnas, insertar columna 'CA NOTES' y guardar el archivo para luego realizar el merge con df_ayer"""
 
 try:
-        
         df_hoy.drop(columns=df_columns_to_drop, axis='columns', inplace=True, errors='ignore')
         print("Columnas eliminadas")
 
         df_hoy.insert(9, 'CA NOTES', '')
         print("Columna 'CA NOTES' insertada")
         df_hoy.to_excel(ruta_df1, index=False)
+        print("Creacion del nuevo archivo con la columna 'CA NOTES' sin errores")
 
         #print(df_hoy.head())
 except ValueError as e:
-        Error_Cachado = 'Columna ya existe'
+        print("La columna 'CA NOTES' ya existe. Continuando con el proceso...")
+        
 except Exception as e:
-        Error_Cachado = 'Error inesperado'
+        print(f"Ocurrió un error inesperado: {e}")
+        exit(1)
 finally:
         """Buscar y reemplazar texto específico en la hoja de Excel"""
 
@@ -80,15 +78,7 @@ finally:
         df_hoy.to_excel(ruta_df1, index=False)
 
         print("Reemplazo de texto específico completado y archivo guardado.")
-
-        if Error_Cachado == 'Columna ya existe':
-            print("La columna 'CA NOTES' ya existe. Continuando con el proceso...")
         
-        elif Error_Cachado == 'Error inesperado':
-            print(f"Ocurrió un error inesperado: {e}")
-        else:
-            print("Proceso completado sin errores.")
-
 
 """Realizar merge entre df_hoy y df_ayer utilizando 'Last PO #' como clave"""
 
@@ -96,9 +86,11 @@ try:
     matriz_ayer = df_ayer[['Last PO #', 'CA NOTES']]
     df_merged = pd.merge(df_hoy, matriz_ayer, on='Last PO #', how='left')
     df_hoy.to_excel(ruta_df1, index=False)
+    print("Merge realizado correctamente. Archivo actualizado con los datos combinados.")
 
 except Exception as e:
         print(f"Error al realizar el merge: {e}")
+        exit(1)
 
 
 
