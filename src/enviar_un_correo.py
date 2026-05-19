@@ -5,6 +5,7 @@ import pandas as pd
 import openpyxl
 import os
 from datetime import date
+import shutil
 
 
 """Info general"""
@@ -15,37 +16,47 @@ fecha_formateada = hoy.strftime("%m-%d-%y")
 fecha_ayer = hoy - pd.Timedelta(days=1)
 fecha_ayer = fecha_ayer.strftime("%m-%d-%y")
 df_columns_to_drop = ['NOA Rec Date', 'NOA Assigment', 'NOA Sent', 'NOA Sent User','Debtor NOA Document','CSR.1', 'Office','Notice', 'Notice Contact Email','NOA Entered Date', 'Last Inv Date', 'Last Inv #', 'First Inv Date', 'Relationship Age', 'First Funded', 'Client Age', 'Funded Balance', 'Non Funded Balance']
+Ruta_nube = "C:\\Users\\cokek\\OneDrive - C.R. England\\Documents\\"+fecha_formateada +"_ECS_Factoring_NOARecdDate.xlsx"
 
+
+
+RUTA_LOCAL = os.path.join(directorio_actual,"..","data")
 
 """Ruta Archivo Nuevo"""
 
 ruta_df1 = os.path.join(directorio_actual,"..","data",fecha_formateada+"_ECS_Factoring_NOARecdDate" ".xlsx")
 #print(ruta_df1)
 
-
 """Ruta Archivo Anterior"""
 
 ruta_df2 = os.path.join(directorio_actual,"..","data",fecha_ayer+"_ECS_Factoring_NOARecdDate" ".xlsx")
 #print(ruta_df2)
 
-
-"""Limpieza de datos"""
+"""Lectura de archivos Excel"""
 
 try:
     df_hoy = pd.read_excel(ruta_df1)
     df_ayer = pd.read_excel(ruta_df2)
+    print("Archivos Excel leídos correctamente.")
+
 except Exception as e:
     print(f"Error al leer los archivos Excel: {e}")
+    print(f"Copiando el archivo desde la nube a la ruta local, intentelo de nuevo.")
+    shutil.copy2(Ruta_nube, ruta_df1)
     exit(1)
-else:
-    print("Archivos Excel leídos correctamente.")
-    df_hoy.drop(columns=df_columns_to_drop, axis='columns', inplace=True, errors='ignore')
-    print("Columnas eliminadas")
+ 
+
+""""Adaptacion del df_hoy: eliminar columnas, insertar columna 'CA NOTES' y guardar el archivo para luego realizar el merge con df_ayer"""
 
 try:
+        
+        df_hoy.drop(columns=df_columns_to_drop, axis='columns', inplace=True, errors='ignore')
+        print("Columnas eliminadas")
+
         df_hoy.insert(9, 'CA NOTES', '')
         print("Columna 'CA NOTES' insertada")
         df_hoy.to_excel(ruta_df1, index=False)
+
         #print(df_hoy.head())
 except ValueError as e:
         Error_Cachado = 'Columna ya existe'
@@ -78,9 +89,12 @@ finally:
         else:
             print("Proceso completado sin errores.")
 
+
+"""Realizar merge entre df_hoy y df_ayer utilizando 'Last PO #' como clave"""
+
 try:
-    df_trabajo = pd.merge(df_ayer, df_hoy, on='CA NOTES', how='right')
-    print("Merge realizado correctamente.")
+    matriz_ayer = df_ayer[['Last PO #', 'CA NOTES']]
+    df_merged = pd.merge(df_hoy, matriz_ayer, on='Last PO #', how='left')
     df_hoy.to_excel(ruta_df1, index=False)
 
 except Exception as e:
