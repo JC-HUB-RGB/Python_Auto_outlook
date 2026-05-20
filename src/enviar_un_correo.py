@@ -11,7 +11,6 @@ import time
 
 """Info general"""
 outlook = win32.Dispatch('outlook.application')
-correo = outlook.CreateItem(0)
 directorio_actual = os.path.dirname(__file__)
 hoy = date.today()
 fecha_formateada = hoy.strftime("%m-%d-%y")
@@ -26,7 +25,7 @@ Palabras_Buscar = ["noa", "DOESNT VERIFY", "@noa.triumphpay", "WEB", "triumphpay
 """Ruta Archivo Nuevo"""
 
 #ruta_df1 = os.path.join(directorio_actual,"..","data",fecha_formateada+"_ECS_Factoring_NOARecdDate" ".xlsx")
-ruta_df1 = os.path.join(directorio_actual,"..","data",fecha_ayer+"_ECS_Factoring_NOARecdDate" ".xlsx")
+ruta_df1 = os.path.join(directorio_actual,"..","data",fecha_formateada+"_ECS_Factoring_NOARecdDate" ".xlsx")
 #print(ruta_df1)
 
 """Ruta Archivo Anterior"""
@@ -53,7 +52,7 @@ def carga_archivos_excel( intentos=0, max_intentos=3):
                 return False, None, None, intentos
 
 def Guardar_archivo_excel():
-   df_hoy.to_excel(ruta_df1, index=False)      
+        df_hoy.to_excel(ruta_df1, index=False)      
 
 
 
@@ -164,17 +163,16 @@ for indice, fila in df_final.iterrows():
 
                 fila['CA NOTES'] = "Revisar notas de atención o advertencia"
                 
-                Guardar_archivo_excel()
 
                 continue  # Si se encuentra alguna de las palabras en las notas, se omite el envío del correo para este registro
 
         try:
+                correo = outlook.createItem(0)
                 correo.To = Email_Destinatario
                 correo.Subject = f"PLEASE REPLY NOA confirmation required Carrier {Client_Name} // MC {MC_number} // Load {PO_Number}"
-                correo.Body = f"""
-Good morning
+                correo.Body = f"""Good morning
 
-                                
+                
 Attached you'll find our NOA for the carrier. Please confirm when received.
 
                         
@@ -182,8 +180,8 @@ Thank you and have a great day! 🙂
 
                         
 *Please note if you are seeing this message again, it is because we have not received confirmation."""
-        
-                ruta_attachment = os.path.join(directorio_actual,"..","attachments")
+                
+                ruta_attachment = os.path.join(directorio_actual,"..","attachments", Client_Name + " - NOA.pdf")
                 correo.Attachments.Add(ruta_attachment)
                 correo.display()
                 fila['CA NOTES'] = f"{fecha_formateada} SENT"
@@ -192,23 +190,15 @@ Thank you and have a great day! 🙂
         except FileNotFoundError as e:
                 print(f"attachment not found for {Client_Name}: {e}")
                 fila['CA NOTES'] = "File attachment not found"
+                print(ruta_attachment)
+                input("Press Enter to continue to the next email...")
                 continue  # Si el archivo adjunto no se encuentra, se omite el envío del correo para este registro y se continúa con el siguiente
         except Exception as e:
                 print(f"Error al enviar el correo para {Client_Name}: {e}")
                 fila['CA NOTES'] = "Error sending email"
+                print(ruta_attachment)
+                input("Press Enter to continue to the next email...")
                 continue
-               
-       
 
-                
-       
-
-
-
-
-
-
-            
-    
-
+df_final.to_excel(ruta_df1, index = 0)
 
