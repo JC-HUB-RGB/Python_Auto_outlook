@@ -1,6 +1,7 @@
 # Ignorar archivos de datos
 data/
 attachments/
+RESULTADOS/
 
 # Ignorar archivos temporales de Excel
 ~$*.xlsx
