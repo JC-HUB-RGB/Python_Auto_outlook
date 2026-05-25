@@ -1,5 +1,4 @@
 """SETUPPP"""
-
 import win32com.client as win32
 import pandas as pd
 import openpyxl
@@ -9,7 +8,6 @@ import shutil
 import time
 import tkinter as tk
 from tkinter import filedialog
-import pandas as pd
 import pywintypes
 
 """Info general"""
@@ -264,7 +262,7 @@ try:
         print("Reemplazo de texto específico completado")
         time.sleep(5)
         df_ayer = df_ayer.drop_duplicates(subset=['Last PO #'], keep='last')
-        df_hoy = df_ayer.drop_duplicates(subset=['Last PO #'], keep='last')
+        df_hoy = df_hoy.drop_duplicates(subset=['Last PO #'], keep='last')
         try:
                 for deudor, lista_valores in Adaptación_deudores.items():
                         #print(f'Remplazo de texto para deudor {deudor}')
@@ -305,7 +303,7 @@ except Exception as e:
 try:    
         Condicion1 = df_hoy['CSR'] == 'VGUERRERO'
         Condicion2 = df_hoy['CA NOTES'].isna()
-        df_correos_enviar = df_hoy[(Condicion1) & (Condicion2)]
+        df_correos_enviar = df_hoy[(Condicion1) & (Condicion2)].copy()
         size = df_correos_enviar['Last PO #'].size
         print(f'Existen {size} correos por enviar')
 except Exception as e:
