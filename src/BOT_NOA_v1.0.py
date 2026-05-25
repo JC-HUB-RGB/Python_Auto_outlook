@@ -10,76 +10,183 @@ import time
 import tkinter as tk
 from tkinter import filedialog
 import pandas as pd
+import pywintypes
 
 """Info general"""
+
+date_name = date.weekday(date.today())
 outlook = win32.Dispatch('outlook.application')
+
 directorio_actual = os.path.dirname(__file__)
 hoy = date.today()
 fecha_hoy = hoy.strftime("%m-%d-%y")
 fecha_ayer = hoy - pd.Timedelta(days=1)
 fecha_ayer = fecha_ayer.strftime("%m-%d-%y")
+
+"""Fechas en Fin de Semana"""
+"""Fechas cuando es Domingo"""
+fecha_viernes_en_domingo = hoy - pd.Timedelta(days=2)
+fecha_jueves_en_domingo = fecha_viernes_en_domingo - pd.Timedelta(days=1)
+fecha_jueves_en_domingo = fecha_jueves_en_domingo.strftime("%m-%d-%y")
+fecha_viernes_en_domingo = fecha_viernes_en_domingo.strftime("%m-%d-%y")
+
+"""Fechas cuando es sabado"""
+fecha_viernes_en_sabado = hoy - pd.Timedelta(days=1)
+fecha_jueves_en_sabado = fecha_viernes_en_sabado - pd.Timedelta(days=1)
+fecha_jueves_en_sabado = fecha_jueves_en_sabado.strftime("%m-%d-%y")
+fecha_viernes_en_sabado = fecha_viernes_en_sabado.strftime("%m-%d-%y")
+
+"""Fechas cuando es lunes"""
+fecha_viernes_en_lunes = hoy - pd.Timedelta(days=3)
+fecha_viernes_en_sabado = fecha_viernes_en_lunes.strftime("%m-%d-%y")
+
+"""RUTAS"""
+
+"""Rutas Generales"""
+Ruta_nube_hoy = r"C:\\Users\\cokek\\OneDrive - C.R. England\\Documents\\"+ fecha_hoy +"_ECS_Factoring_NOARecdDate.xlsx"
+Ruta_nube_ayer = r"C:\\Users\\cokek\\OneDrive - C.R. England\\Documents\\"+ fecha_ayer +"_ECS_Factoring_NOARecdDate.xlsx"
+
+ruta_df_hoy = os.path.join(directorio_actual,"..","data",fecha_hoy+"_ECS_Factoring_NOARecdDate" ".xlsx")
+ruta_df_hoy_procesado = os.path.join(directorio_actual,"..","data",fecha_hoy+"_ECS_Factoring_NOARecdDate_Procesado" ".xlsx")
+
+ruta_df_ayer = os.path.join(directorio_actual,"..","data",fecha_ayer+"_ECS_Factoring_NOARecdDate" ".xlsx")
+ruta_df_ayer_procesado = os.path.join(directorio_actual,"..","data",fecha_ayer+"_ECS_Factoring_NOARecdDate_Procesado" ".xlsx")
+
+"""Rutas en domingo"""
+Ruta_nube_hoy_domingo = r"C:\\Users\\cokek\\OneDrive - C.R. England\\Documents\\"+ fecha_viernes_en_domingo+"_ECS_Factoring_NOARecdDate.xlsx"
+Ruta_nube_ayer_domingo = r"C:\\Users\\cokek\\OneDrive - C.R. England\\Documents\\"+ fecha_jueves_en_domingo+"_ECS_Factoring_NOARecdDate.xlsx"
+ruta_df_hoy_domingo = os.path.join(directorio_actual,"..","data",fecha_viernes_en_domingo +"_ECS_Factoring_NOARecdDate" ".xlsx")
+ruta_df_ayer_domingo = os.path.join(directorio_actual,"..","data",fecha_jueves_en_domingo +"_ECS_Factoring_NOARecdDate" ".xlsx")
+
+"""Rutas en sábado"""
+Ruta_nube_hoy_sabado = r"C:\\Users\\cokek\\OneDrive - C.R. England\\Documents\\"+ fecha_viernes_en_sabado+"_ECS_Factoring_NOARecdDate.xlsx"
+Ruta_nube_ayer_sabado = r"C:\\Users\\cokek\\OneDrive - C.R. England\\Documents\\"+ fecha_jueves_en_sabado+"_ECS_Factoring_NOARecdDate.xlsx"
+ruta_df_hoy_sabado = os.path.join(directorio_actual,"..","data",fecha_viernes_en_sabado +"_ECS_Factoring_NOARecdDate" ".xlsx")
+ruta_df_ayer_sabado = os.path.join(directorio_actual,"..","data",fecha_jueves_en_sabado +"_ECS_Factoring_NOARecdDate" ".xlsx")
+
+"""Rutas en Lunes"""
+Ruta_nube_ayer_lunes = r"C:\\Users\\cokek\\OneDrive - C.R. England\\Documents\\"+ fecha_viernes_en_lunes+"_ECS_Factoring_NOARecdDate.xlsx"
+ruta_df_ayer_lunes = os.path.join(directorio_actual,"..","data",fecha_viernes_en_lunes +"_ECS_Factoring_NOARecdDate" ".xlsx")
+
+"""Miscelaneo"""
+
+ruta_nuevo_archivo = os.path.join(directorio_actual,"..","RESULTADOS",fecha_hoy+ "_Archivo_Procesado.xlsx" )
+Ruta_nube_archivo_procesado = r"C:\\Users\\cokek\\OneDrive - C.R. England\\Documents\\"+ fecha_hoy +"_ECS_Factoring_NOARecdDate_Procesado.xlsx"
 df_columns_to_drop = ['NOA Rec Date', 'NOA Assigment', 'NOA Sent', 'NOA Sent User','Debtor NOA Document','CSR.1', 'Office','Notice', 'Notice Contact Email','NOA Entered Date', 'Last Inv Date', 'Last Inv #', 'First Inv Date', 'Relationship Age', 'First Funded', 'Client Age', 'Funded Balance', 'Non Funded Balance']
-Ruta_nube = r"C:\\Users\\cokek\\OneDrive - C.R. England\\Documents\\"+ fecha_hoy +"_ECS_Factoring_NOARecdDate.xlsx"
-#ruta_attachment = os.path.join(directorio_actual,"..","attachments",fecha_formateada+"_ECS_Factoring_NOARecdDate" ".xlsx")
 Palabras_Buscar = ["noa", "doesnt verify", "@noa.triumphpay", "web", "triumphpay", "website", "use triumph pay", "triumph", "tp", "epay"]
-ruta_nuevo_archivo = os.path.join(directorio_actual,"..","RESULTADOS",fecha_hoy+ "_Archivo_Resultado.xlsx" )
-
-"""Ruta Archivo Nuevo"""
-
-ruta_df1 = os.path.join(directorio_actual,"..","data",fecha_hoy+"_ECS_Factoring_NOARecdDate" ".xlsx")
-#print(ruta_df1)
-
-"""Ruta Archivo Anterior"""
-
-ruta_df2 = os.path.join(directorio_actual,"..","data",fecha_ayer+"_ECS_Factoring_NOARecdDate" ".xlsx")
-#print(ruta_df2)
 
 """Definicion de funciones"""
-def carga_archivos_excel( intentos=0, max_intentos=3):
+def carga_archivos_excel_semanal( intentos=0, max_intentos=3):
         try:
-
-                df_hoy = pd.read_excel(ruta_df1)
-                df_ayer = pd.read_excel(ruta_df2)
+                df_hoy = pd.read_excel(ruta_df_hoy)
+                df_ayer = pd.read_excel(ruta_df_ayer)
                 print("Archivos Excel leídos correctamente.")
                 return True, df_hoy, df_ayer, 0  # Si la lectura es exitosa, retornamos True para salir del ciclo
         except Exception as e:
                 print(f"Error al leer los archivos Excel: {e}")
                 print(f"Copiando el archivo desde la nube a la ruta local, intentelo de nuevo.")
                 intentos += 1
-                shutil.copy2(Ruta_nube, ruta_df1)
+                shutil.copy2(Ruta_nube_hoy, ruta_df_hoy)
+                shutil.copy2(Ruta_nube_ayer, ruta_df_ayer)
                 return False, None, None, intentos  # Si ocurre un error, retornamos False para intentar nuevamente
 
+def carga_archivos_excel_domingo(intentos=0, max_intentos=3):
+        try:
+                df_hoy = pd.read_excel(ruta_df_hoy_domingo)
+                df_ayer = pd.read_excel(ruta_df_ayer_domingo)
+                print("Archivos Excel leídos correctamente.")
+                return True, df_hoy, df_ayer, 0
+        except Exception as e:
+                print(f"Error al leer los archivos Excel: {e}")
+                print(f"Copiando el archivo desde la nube a la ruta local, intentelo de nuevo.")
+                intentos += 1
+                shutil.copy2(Ruta_nube_hoy_domingo, ruta_df_hoy_domingo)
+                shutil.copy2(Ruta_nube_ayer_domingo, ruta_df_ayer_domingo)
+                return False, None, None, intentos
+def carga_archivos_excel_sabado(intentos=0, max_intentos=3):
+        try:
+                df_hoy = pd.read_excel(ruta_df_hoy_sabado)
+                df_ayer = pd.read_excel(ruta_df_ayer_sabado)
+                print("Archivos Excel leídos correctamente.")
+                return True, df_hoy, df_ayer, 0
+        except Exception as e:
+                print(f"Error al leer los archivos Excel: {e}")
+                print(f"Copiando el archivo desde la nube a la ruta local, intentelo de nuevo.")
+                intentos += 1
+                shutil.copy2(Ruta_nube_hoy_sabado, ruta_df_hoy_sabado)
+                shutil.copy2(Ruta_nube_ayer_sabado, ruta_df_ayer_sabado)
+                return False, None, None, intentos
+def carga_archivos_excel_lunes(intentos=0, max_intentos=3):
+        try:
+                df_hoy = pd.read_excel(ruta_df_hoy)
+                df_ayer = pd.read_excel(ruta_df_ayer_lunes)
+                print("Archivos Excel leídos correctamente.")
+                return True, df_hoy, df_ayer, 0
+        except Exception as e:
+                print(f"Error al leer los archivos Excel: {e}")
+                print(f"Copiando el archivo desde la nube a la ruta local, intentelo de nuevo.")
+                intentos += 1
+                shutil.copy2(Ruta_nube_hoy, ruta_df_hoy)
+                shutil.copy2(Ruta_nube_ayer_lunes, ruta_df_ayer_lunes)
+                return False, None, None, intentos
 
 def Guardar_archivo_excel(nombre_dataframe, ruta_guardar):
    nombre_dataframe.to_excel(ruta_guardar, index=False)      
 
-Palabras_reemplazo = [
-        {'Golden Moon Transport Inc //Only Wire or RTP' : 'Golden Moon Transport Inc'},
-        {'Gholia Logistics Inc (NO ACH FEE)':'Gholia Logistics Inc'},
-        {'Debtors@englandlogistics.com':''},
-        {'paperwork@englandlogistics.com':''},
-        {'invoices@amtransexpedite.com;Pods@fusiontransport.com;invoices@amtransexpedite.com':'noa@fusiontransport.com'},
-        {'invoices@amtransexpedite.com;pod@amtransexpedite.com;pods@fusiontransport.com;payables@fusiontransport.com':'noa@fusiontransport.com'},
-        {'PS:carrierinquiries@challenger.com':'vendorsetup@challenger.com'},
-        {'quickpay@uslfreight.com PS-ap@uslfreight.com TRIUM':'uslogisticsllc@noa.triumphpay.com'},
-        {'NOA transplacetx@noa.triumphpay.com':'transplacestuttgart@noa.triumphpay.com'},
-        {'PS Triumph: (469) 312-7222':'Paullog@noa.triumphpay.com'},
-        {'Classic Freight Transportation Inc (NO ACH FEE)':'Classic Freight Transportation Inc'},
-        {'Dhillon Bros Carrier LLC (RTP Only)':'Dhillon Bros Carrier LLC'},
-        {'MBM Global Inc (RTP Only)':'MBM Global Inc'},
-        {'jd@droverlogisticsgroup.com; ap@shipdrover.com':'ap@shipdrover.com'},
-        {'ari.accounting@actn.com':'ari.ap@actn.com; action@noa.triumphpay.com'},
-        {'carriers@its4logistics.com;paperwork@its4logistics.com':'inquiries@its4logistics.com; cody.chapman@its4logistics.com'},
-        {'accounting@journeyfreight.com':'apinquiries@journeyfreight.com'},
-        {'ap@transportationone.com':'paymentstatus@transportationone.com; billing@transportationone.com'},
-        {'usa-accounting@scotlynn.com':'paystatus@scotlynn.com'},
-        {'; spotbilling@spotinc.com':'paymentstatus@spotinc.com'},
-        {'mcalvin@frontlinelogistics.com':'cvella@frontlinelogistics.com'},
-        #{'noa: cvella@frontlinelogistics.com':' '}
-        #{'noa: cvella@frontlinelogistics.com':' '}
-        {'invoices@transendlogistics.com; transend@trsd.aljex.com;accounting@transendlogistics.com':'dmims@transendlogistics.com'}
+Palabras_reemplazo = {
+        'Golden Moon Transport Inc //Only Wire or RTP' : 'Golden Moon Transport Inc',
+        'Gholia Logistics Inc (NO ACH FEE)':'Gholia Logistics Inc',
+        'Classic Freight Transportation Inc (NO ACH FEE)':'Classic Freight Transportation Inc',
+        'Dhillon Bros Carrier LLC (RTP Only)':'Dhillon Bros Carrier LLC',
+        'MBM Global Inc (RTP Only)':'MBM Global Inc',
+        'Debtors@englandlogistics.com':'',
+        'Debtors@Englandlogistics.com':'',
+        'debtors@englandlogistics.com':'',
+        'paperwork@englandlogistics.com':'',
+}
+
+columnas_a_modificar = ['Debtor Email Address', 'Attention Note', 'Warning Note']
+
+Adaptación_deudores = {
+
+        'AM Trans Expedite Inc - IL':['noa@fusiontransport.com', '', ''],
+        'AM Trans Expedite Inc - NJ':['noa@fusiontransport.com', '', ''],
+        'Challenger Motor Freight Inc':['vendorsetup@challenger.com', '', ''],
+        'Challenger Logistics Inc - ON':['vendorsetup@challenger.com', '', ''],
+        'US Logistics LLC':['uslogisticsllc@noa.triumphpay.com', '', ''],
+        'Transplace Texas LP - KY':['transplacestuttgart@noa.triumphpay.com', '', ''],
+        'Paul Logistics Inc':['Paullog@noa.triumphpay.com', '', ''],
+        'Drover Logistics Corp':['team@shipdrover.com;ap@shipdrover.com', '', ''],
+        'Ari Logistics LLC dba Action Enterprise Logistics':['ari.ap@actn.com; action@noa.triumphpay.com', '', ''],
+        'ITS National LLC dba ITS National':['inquiries@its4logistics.com; cody.chapman@its4logistics.com', '', ''],
+        'Transportation One - IL':['paymentstatus@transportationone.com; billing@transportationone.com', '', ''],
+        'Scotlynn USA Division Inc':['paystatus@scotlynn.com','',''],
+        'Spot Freight Inc':['paymentstatus@spotinc.com','',''],
+        'Frontline Logistics':['cvella@frontlinelogistics.com','',''],
+        'Jear Logistics LLC':['jear@noa.triumphpay.com','','',],
+        'Transend Logistics LLC -IL':['dmims@transendlogistics.com','',''],
+        'Mohawk Global Logistics':['mstoddard@mohawkglobal.com','', ''],
+        'R2 LOGISTICS':['carrierservices@r2logistics.com','EPAY', ''],
+        'Venture Connect / Transcorr Ntl Logistics LLC':['carrierinv@venturelogistics.com; paystatus@venturelogistics.com','', ''],
+        'Andover Logistics LLC':['mark@andoverlogistics.com;accounting@andoverlogistics.com','EPAY', ''],
+        'Synchrogistics LLC - NC':['accounting@synchrogistics.com', '', ''],
+        'Circle Logistics Inc - IN':['PAYSTATUS@CIRCLEDELIVERS.COM','', '']
+}
+"""     
         
-]
+        '':['','', ''],
+        '':['','', ''],
+        '':['','', ''],
+        '':['','', ''],
+        '':['','', ''],
+        '':['','', ''],
+        '':['','', ''],
+        '':['','', ''],
+        '':['','', ''],
+        '':['','', ''],
+                
+        {'accounting@journeyfreight.com':'apinquiries@journeyfreight.com'},"""
+        
 
 """def seleccionar_archivo_excel():
     # Abre una ventana emergente para que el usuario seleccione un archivo de Excel
@@ -95,24 +202,48 @@ Palabras_reemplazo = [
     
     # 3. Retornar la ruta elegida (si el usuario cancela, devolverá una cadena vacía)
     return ruta_archivo"""
-"""Lectura de archivos Excel"""
 
 
 """Empieza el código"""
 
+"""Lectura de archivos Excel"""
 
-
-Estado_carga, df_hoy, df_ayer, intentos = carga_archivos_excel()
-
-"""Reintentos para cargar los archivos Excel, con una pausa de 3 segundos entre cada intento"""
-try:
-        while Estado_carga == False and intentos < 3:
-                print("Esperando 3 segundos antes de intentar cargar los archivos nuevamente...")
-                time.sleep(3)  # Espera 3 segundos antes de intentar cargar los archivos nuevamente
-                Estado_carga, df_hoy, df_ayer, intentos = carga_archivos_excel()
-except Exception as e:
-        print(f"NO SE ENCUENTRAN LOS ARCHIVOS A CARGAR, POR FAVOR INTENTE MAS TARDE.")
-
+if date_name == 6: #Domingo
+        Estado_carga, df_hoy, df_ayer, intentos = carga_archivos_excel_domingo()
+        try:
+                while Estado_carga == False and intentos < 3:
+                        print("Esperando 3 segundos antes de intentar cargar los archivos nuevamente...")
+                        time.sleep(3)  # Espera 3 segundos antes de intentar cargar los archivos nuevamente
+                        Estado_carga, df_hoy, df_ayer, intentos = carga_archivos_excel_domingo()
+        except Exception as e:
+                        print(f"NO SE ENCUENTRAN LOS ARCHIVOS A CARGAR, POR FAVOR INTENTE MAS TARDE.")
+elif date_name == 5: #Sabado
+        Estado_carga, df_hoy, df_ayer, intentos = carga_archivos_excel_sabado()
+        try:
+                while Estado_carga == False and intentos < 3:
+                        print("Esperando 3 segundos antes de intentar cargar los archivos nuevamente...")
+                        time.sleep(3)  # Espera 3 segundos antes de intentar cargar los archivos nuevamente
+                        Estado_carga, df_hoy, df_ayer, intentos = carga_archivos_excel_sabado()
+        except Exception as e:
+                        print(f"NO SE ENCUENTRAN LOS ARCHIVOS A CARGAR, POR FAVOR INTENTE MAS TARDE.")
+elif date_name == 0: #Lunes
+        Estado_carga, df_hoy, df_ayer, intentos = carga_archivos_excel_lunes()
+        try:
+                while Estado_carga == False and intentos < 3:
+                        print("Esperando 3 segundos antes de intentar cargar los archivos nuevamente...")
+                        time.sleep(3)  # Espera 3 segundos antes de intentar cargar los archivos nuevamente
+                        Estado_carga, df_hoy, df_ayer, intentos = carga_archivos_excel_lunes()
+        except Exception as e:
+                        print(f"NO SE ENCUENTRAN LOS ARCHIVOS A CARGAR, POR FAVOR INTENTE MAS TARDE.")
+else:
+        Estado_carga, df_hoy, df_ayer, intentos = carga_archivos_excel_semanal()
+        try:
+                while Estado_carga == False and intentos < 3:
+                        print("Esperando 3 segundos antes de intentar cargar los archivos nuevamente...")
+                        time.sleep(3)  # Espera 3 segundos antes de intentar cargar los archivos nuevamente
+                        Estado_carga, df_hoy, df_ayer, intentos = carga_archivos_excel_semanal()
+        except Exception as e:
+                print(f"NO SE ENCUENTRAN LOS ARCHIVOS A CARGAR, POR FAVOR INTENTE MAS TARDE.")
 
 
 """"Adaptacion del df_hoy: eliminar columnas, insertar columna 'CA NOTES' """
@@ -127,13 +258,23 @@ try:
                  print("La columna 'CA NOTES' ya existe. Continuando con el proceso...")
 
         print("Creacion del nuevo archivo con la columna 'CA NOTES' sin errores")
-        for diccionario in Palabras_reemplazo:
-                for texto_original, texto_limpio in diccionario.items():
-                        df_hoy.replace(to_replace=texto_original, value=texto_limpio, inplace=True, regex=False)
+        df_hoy.replace(Palabras_reemplazo, inplace=True, regex=False)
+        
 
         print("Reemplazo de texto específico completado")
         time.sleep(5)
         df_ayer = df_ayer.drop_duplicates(subset=['Last PO #'], keep='last')
+        df_hoy = df_ayer.drop_duplicates(subset=['Last PO #'], keep='last')
+        try:
+                for deudor, lista_valores in Adaptación_deudores.items():
+                        #print(f'Remplazo de texto para deudor {deudor}')
+                        df_hoy.loc[df_hoy['Debtor Name'] == deudor, columnas_a_modificar] = lista_valores
+
+        except Exception as e :
+                print("Error cambiando valores de debtors")
+                exit(1)
+
+        Guardar_archivo_excel(df_hoy,ruta_nuevo_archivo)
         #print(df_hoy.head()) 
 
 except Exception as e:
@@ -149,7 +290,7 @@ except Exception as e:
 try:
         mapeo_notas = df_ayer.set_index('Last PO #')['CA NOTES']
         df_hoy['CA NOTES'] = df_hoy['Last PO #'].map(mapeo_notas)
-        Guardar_archivo_excel(df_hoy,ruta_df1)
+        Guardar_archivo_excel(df_hoy,ruta_df_hoy)
 
 except Exception as e:
         print(f"Error al realizar el merge: {e}")
@@ -159,9 +300,9 @@ except Exception as e:
 
 
 
-"""FILTRO DE REGISTROS PARA ENVIAR CORREO: CSR = VGUERRERO y CA NOTES = #N/A"""
+"""FILTRO DE REGISTROS PARA ENVIAR CORREO"""
 
-try:
+try:    
         Condicion1 = df_hoy['CSR'] == 'VGUERRERO'
         Condicion2 = df_hoy['CA NOTES'].isna()
         df_correos_enviar = df_hoy[(Condicion1) & (Condicion2)]
@@ -193,6 +334,7 @@ for indice, fila in df_correos_enviar.iterrows():
         tiene_palabra_attention = any(palabra in nota_attention for palabra in Palabras_Buscar)
         tiene_palabra_warning = any(palabra in nota_warning for palabra in Palabras_Buscar)
         correo_nulo = pd.isna(fila['Debtor Email Address'])
+
         print(f"Procesando correo para {Client_Name} , con la carga {PO_Number}")
 
         if tiene_palabra_attention or tiene_palabra_warning:
@@ -202,15 +344,14 @@ for indice, fila in df_correos_enviar.iterrows():
                 
                 continue  # Si se encuentra alguna de las palabras en las notas, se omite el envío del correo para este registro
                 
-        elif correo_nulo:
-                df_correos_enviar.at[indice, 'CA NOTES'] = 'No tiene correo, checar manualmente'
+        elif correo_nulo :
+                df_correos_enviar.at[indice, 'CA NOTES'] = 'NO EMAIL'
                 continue
 
-        
 
         try:
                 correo.To = Email_Destinatario
-                correo.Subject = f"PLEASE REPLY NOA confirmation required Carrier {Client_Name} // MC {MC_number} // Load {PO_Number}"
+                correo.Subject = f"PLEASE REPLY NOA confirmation required {Client_Name} // MC {MC_number} // Load {PO_Number}"
                 correo.Body = f"""
 Good morning
 
@@ -225,23 +366,26 @@ Thank you and have a great day! 🙂
         
                 ruta_attachment = os.path.join(directorio_actual,"..","attachments",Client_Name + " - NOA.pdf" )
                 correo.Attachments.Add(ruta_attachment)
-                correo.display()
+                #correo.Send()
+                #correo.Display()
                 df_correos_enviar.at[indice, 'CA NOTES'] = f'{fecha_hoy} SENT'
-                time.sleep(3)
+                #time.sleep(3)
                 #input("Press Enter to continue to the next email...")
+
 
                
 
-        except FileNotFoundError as e:
+        except pywintypes.com_error as e:
                 print(f"attachment not found for {Client_Name}: {e}")
-                df_correos_enviar.at[indice, 'CA NOTES'] = f'File not found {Client_Name}'
+                df_correos_enviar.at[indice, 'CA NOTES'] = f'File not found'
                 continue
         except Exception as e:
                 print(f"Error al enviar el correo para {Client_Name}: {e}")
-                df_correos_enviar.at[indice, 'CA NOTES'] = f'Error al enviar el correo, PO#{PO_Number}'
+                df_correos_enviar.at[indice, 'CA NOTES'] = f'Error al enviar el correo'
                 continue
 
 df_final = df_hoy['Last PO #'].map(df_correos_enviar.set_index('Last PO #')['CA NOTES'])
 df_hoy['CA NOTES'] = df_final.combine_first(df_hoy['CA NOTES'])
 print(df_hoy)
-Guardar_archivo_excel(df_hoy,ruta_nuevo_archivo)
+Guardar_archivo_excel(df_hoy,ruta_df_hoy_procesado)
+shutil.copy2(ruta_df_hoy_procesado,Ruta_nube_archivo_procesado)
