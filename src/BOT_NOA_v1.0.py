@@ -36,13 +36,13 @@ fecha_viernes_en_sabado = fecha_viernes_en_sabado.strftime("%m-%d-%y")
 
 """Fechas cuando es lunes"""
 fecha_viernes_en_lunes = hoy - pd.Timedelta(days=3)
-fecha_viernes_en_sabado = fecha_viernes_en_lunes.strftime("%m-%d-%y")
+fecha_viernes_en_lunes = fecha_viernes_en_lunes.strftime("%m-%d-%y")
 
 """RUTAS"""
 
 """Rutas Generales"""
-Ruta_nube_hoy = r"C:\\Users\\cokek\\OneDrive - C.R. England\\Documents\\"+ fecha_hoy +"_ECS_Factoring_NOARecdDate.xlsx"
-Ruta_nube_ayer = r"C:\\Users\\cokek\\OneDrive - C.R. England\\Documents\\"+ fecha_ayer +"_ECS_Factoring_NOARecdDate.xlsx"
+Ruta_nube_hoy = r"C:\\Users\\Jorge\\OneDrive - C.R. England\Documents\\"+ fecha_hoy +"_ECS_Factoring_NOARecdDate.xlsx"
+Ruta_nube_ayer = r"C:\\Users\\Jorge\\OneDrive - C.R. England\Documents\\"+ fecha_ayer +"_ECS_Factoring_NOARecdDate.xlsx"
 
 ruta_df_hoy = os.path.join(directorio_actual,"..","data",fecha_hoy+"_ECS_Factoring_NOARecdDate" ".xlsx")
 ruta_df_hoy_procesado = os.path.join(directorio_actual,"..","data",fecha_hoy+"_ECS_Factoring_NOARecdDate_Procesado" ".xlsx")
@@ -63,13 +63,13 @@ ruta_df_hoy_sabado = os.path.join(directorio_actual,"..","data",fecha_viernes_en
 ruta_df_ayer_sabado = os.path.join(directorio_actual,"..","data",fecha_jueves_en_sabado +"_ECS_Factoring_NOARecdDate" ".xlsx")
 
 """Rutas en Lunes"""
-Ruta_nube_ayer_lunes = r"C:\\Users\\cokek\\OneDrive - C.R. England\\Documents\\"+ fecha_viernes_en_lunes+"_ECS_Factoring_NOARecdDate.xlsx"
+Ruta_nube_ayer_lunes = r"C:\\Users\\Jorge\\OneDrive - C.R. England\Documents\\"+ fecha_viernes_en_lunes+"_ECS_Factoring_NOARecdDate.xlsx"
 ruta_df_ayer_lunes = os.path.join(directorio_actual,"..","data",fecha_viernes_en_lunes +"_ECS_Factoring_NOARecdDate" ".xlsx")
 
 """Miscelaneo"""
 
 ruta_nuevo_archivo = os.path.join(directorio_actual,"..","RESULTADOS",fecha_hoy+ "_Archivo_Procesado.xlsx" )
-Ruta_nube_archivo_procesado = r"C:\\Users\\cokek\\OneDrive - C.R. England\\Documents\\"+ fecha_hoy +"_ECS_Factoring_NOARecdDate_Procesado.xlsx"
+Ruta_nube_archivo_procesado = r"C:\\Users\\Jorge\\OneDrive - C.R. England\\Documents\\"+ fecha_hoy +"_ECS_Factoring_NOARecdDate_Procesado.xlsx"
 df_columns_to_drop = ['NOA Rec Date', 'NOA Assigment', 'NOA Sent', 'NOA Sent User','Debtor NOA Document','CSR.1', 'Office','Notice', 'Notice Contact Email','NOA Entered Date', 'Last Inv Date', 'Last Inv #', 'First Inv Date', 'Relationship Age', 'First Funded', 'Client Age', 'Funded Balance', 'Non Funded Balance']
 Palabras_Buscar = ["noa", "doesnt verify", "@noa.triumphpay", "web", "triumphpay", "website", "use triumph pay", "triumph", "tp", "epay"]
 
@@ -168,11 +168,16 @@ Adaptación_deudores = {
         'Venture Connect / Transcorr Ntl Logistics LLC':['carrierinv@venturelogistics.com; paystatus@venturelogistics.com','', ''],
         'Andover Logistics LLC':['mark@andoverlogistics.com;accounting@andoverlogistics.com','EPAY', ''],
         'Synchrogistics LLC - NC':['accounting@synchrogistics.com', '', ''],
-        'Circle Logistics Inc - IN':['PAYSTATUS@CIRCLEDELIVERS.COM','', '']
+        'Circle Logistics Inc - IN':['PAYSTATUS@CIRCLEDELIVERS.COM','', ''],
+        'Unlimited Logistics LLC':['noa@unlimitedlogistics.com','', ''],
+        'Estrella Dispatch Inc':['Estrelladispatch@noa.triumphpay.com; ap@estrelladispatch.com','',''],
+        'R2 LOGISTICS':['cs@r2logistics.com','', ''],
+        'Titanium American Logistics':['TITANIUM@noa.triumphpay.com','', ''],
+        'Transend Logistics LLC -IL':['dmims@transendlogistics.com; accounting@transendlogistics.com','', ''],
 }
 """     
         
-        '':['','', ''],
+        
         '':['','', ''],
         '':['','', ''],
         '':['','', ''],
@@ -306,6 +311,7 @@ try:
         df_correos_enviar = df_hoy[(Condicion1) & (Condicion2)].copy()
         size = df_correos_enviar['Last PO #'].size
         print(f'Existen {size} correos por enviar')
+        time.sleep(5)
 except Exception as e:
         print(f"Error al filtrar los registros para el correo: {e}")
         exit(1)
@@ -364,7 +370,7 @@ Thank you and have a great day! 🙂
         
                 ruta_attachment = os.path.join(directorio_actual,"..","attachments",Client_Name + " - NOA.pdf" )
                 correo.Attachments.Add(ruta_attachment)
-                #correo.Send()
+                correo.Send()
                 #correo.Display()
                 df_correos_enviar.at[indice, 'CA NOTES'] = f'{fecha_hoy} SENT'
                 #time.sleep(3)
