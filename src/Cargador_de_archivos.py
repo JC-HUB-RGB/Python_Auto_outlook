@@ -89,10 +89,24 @@ def carga_archivos_excel():
         time.sleep(5)
         return df_hoy, None, bandera_carga
     else:
-        print("Archivo procesado de hoy encontrado en carpeta data, cargando el archivo...")
-        df_hoy = pd.read_excel(ruta_excel_hoy_procesado)
-        bandera_carga = False
-        time.sleep(5)
-        return df_hoy, None, bandera_carga
-    
-carga_archivos_excel()
+        print("Archivo procesado de hoy encontrado en carpeta data, verificando si es el más actualizado...")
+        if os.path.exists(ruta_descargar_excel_hoy_procesado):
+            if os.path.getmtime(ruta_descargar_excel_hoy_procesado) > os.path.getmtime(ruta_excel_hoy_procesado):
+                shutil.copy2(ruta_descargar_excel_hoy_procesado, ruta_excel_hoy_procesado)
+                df_hoy = pd.read_excel(ruta_excel_hoy_procesado)
+                bandera_carga = False
+                print("Archivo procesado de hoy encontrado en OneDrive es más actualizado que el de carpeta data, cargando el archivo de OneDrive...")
+                time.sleep(5)
+                return df_hoy, None, bandera_carga
+            elif os.path.getmtime(ruta_descargar_excel_hoy_procesado) < os.path.getmtime(ruta_excel_hoy_procesado):
+                df_hoy = pd.read_excel(ruta_excel_hoy_procesado)
+                shutil.copy2(ruta_excel_hoy_procesado,ruta_descargar_excel_hoy_procesado)
+                bandera_carga = False
+                print("Archivo procesado de hoy encontrado en carpeta data es más actualizado que el de OneDrive, cargando el archivo de carpeta data...")
+                time.sleep(5)
+                return df_hoy, None, bandera_carga
+        else:
+            df_hoy = pd.read_excel(ruta_excel_hoy_procesado)
+            bandera_carga = False
+            time.sleep(5)
+            return df_hoy, None, bandera_carga

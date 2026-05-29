@@ -29,7 +29,7 @@ terminacion_archivo_sin_procesar = "_ECS_Factoring_NOARecdDate.xlsx"
 
 ruta_excel_hoy_sin_procesar = os.path.join(directorio_actual,"..","data",fecha_hoy +terminacion_archivo_sin_procesar)
 ruta_excel_hoy_procesado = os.path.join(directorio_actual,"..","data",fecha_hoy+terminacion_archivo_procesado)
-Ruta_nube_archivo_procesado = onedrive_path + fecha_hoy +"_ECS_Factoring_NOARecdDate_Procesado.xlsx"
+Ruta_nube_archivo_procesado = onedrive_path + '\\' + fecha_hoy + terminacion_archivo_procesado
 
 """"Dataframes y variables globales"""
 
@@ -51,6 +51,13 @@ Palabras_reemplazo = {
         'Debtors@Englandlogistics.com':'',
         'debtors@englandlogistics.com':'',
         'paperwork@englandlogistics.com':'',
+        'TAN Transport Inc - REACTIVATION':'TAN Transport Inc',
+        'paperwrok@englandlogistics.com':'',
+        'Mehreen Enterprises LTD (US Currency) (WIRE ONLY)':'Mehreen Enterprises LTD',
+        'MVI Transport (dba Main Venture Investing LLC) ACH preference':'MVI Transport (dba Main Venture Investing LLC)',
+        '24X7 Riders Transport Inc (CAD CURRENCY)':'24X7 Riders Transport Inc',
+        'Canadian Transport Network Inc (CAD Currency)':'Canadian Transport Network Inc',
+        'HS Carrier LLC - RTP ONLY':'HS Carrier LLC',
 }
 
 columnas_a_modificar = ['Debtor Email Address', 'Attention Note', 'Warning Note']
@@ -93,13 +100,14 @@ Adaptación_deudores = {
         'Traffic Tech Inc -IL':['ap@traffictech.com; noa@traffictech.com','', ''],
         'West Michigan Transport LLC dba Windmill Transport':['windmilltransport@noa.triumphpay.com','', ''],
         'England Logistics Inc':['','', ''],
+        'Specialized Transport  Co':['','', ''],
+        'Chief Logistics, LLC':['accounting@chieflogistics.com; claudia@chieflogistics.com','', ''],
 }
 """     
         
         
         
-        '':['','', ''],
-        '':['','', ''],
+       
         '':['','', ''],
         '':['','', ''],
         '':['','', ''],
@@ -175,6 +183,7 @@ else:
         """FILTRO DE REGISTROS PARA ENVIAR CORREO"""
 
         try:    
+
                 Condicion1 = df_hoy['CSR'] == 'VGUERRERO'
                 Condicion2 = df_hoy['CA NOTES'].isna()
                 df_correos_enviar = df_hoy[(Condicion1) & (Condicion2)].copy()
@@ -215,17 +224,17 @@ for indice, fila in df_correos_enviar.iterrows():
 
                 df_correos_enviar.at[indice, 'CA NOTES'] = 'Checar Manualmente'
                 print(f"Correo no enviado, checar manualmente")
-                time.sleep(5)
+                #time.sleep(5)
                 continue  # Si se encuentra alguna de las palabras en las notas, se omite el envío del correo para este registro
                 
         elif correo_nulo :
                 df_correos_enviar.at[indice, 'CA NOTES'] = 'NO EMAIL'
-                time.sleep(5)
+                #time.sleep(5)
                 continue
 
         elif 'debtors@englandlogistics.com' in correos_englandlogistics or 'paperwork@englandlogistics.com' in correos_englandlogistics:
                 df_correos_enviar.at[indice, 'CA NOTES'] = 'Correo de England Logistics, checar manualmente'
-                time.sleep(5)
+                #time.sleep(5)
                 print(f"Correo no enviado, checar manualmente")
                 continue
 
@@ -249,7 +258,7 @@ Thank you and have a great day! 🙂
                 correo.Attachments.Add(ruta_attachment)
                 correo.importance = 2
                 #correo.Send()
-                correo.Display()
+                #correo.Display()
                 df_correos_enviar.at[indice, 'CA NOTES'] = f'{fecha_hoy} SENT'
                 #time.sleep(3)
                 #input("Press Enter to continue to the next email...")
@@ -266,6 +275,5 @@ Thank you and have a great day! 🙂
 
 df_final = df_hoy['Last PO #'].map(df_correos_enviar.set_index('Last PO #')['CA NOTES'])
 df_hoy['CA NOTES'] = df_final.combine_first(df_hoy['CA NOTES'])
-print(df_hoy)
 Guardar_archivo_excel(df_hoy,ruta_excel_hoy_procesado)
 shutil.copy2(ruta_excel_hoy_procesado,Ruta_nube_archivo_procesado)
