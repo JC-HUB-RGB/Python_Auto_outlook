@@ -102,6 +102,12 @@ Adaptación_deudores = {
         'England Logistics Inc':['','', ''],
         'Specialized Transport  Co':['','', ''],
         'Chief Logistics, LLC':['accounting@chieflogistics.com; claudia@chieflogistics.com','', ''],
+        'Navajo Express Inc':['carrierpaystatus@navajo.com','', ''],
+        'Ruan Transport Corporation':['carrierbilling@ruan.com; freightaudit@ruan.com; carrierprocurement@ruan.com','', ''],
+        'Rubicon Transportation LLC':['payments@rubicontransportation.com; rubicon@noa.triumphpay.com','', ''],
+        'Ship Amino LLC dba OGRE-S':['ap@shipamino.com; shipamino@noa.triumphpay.com','', ''],
+        'RJS Logistics, Inc.':['billing@rjslogistics.com; payment@rjslogistics.com','', ''],
+        'Best Logistic Services aka Reich Logistics services Inc':['NOA@shipwithbest.com','', ''],
 }
 """     
         
