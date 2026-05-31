@@ -93,7 +93,7 @@ Adaptación_deudores = {
         'Transend Logistics LLC -IL':['dmims@transendlogistics.com; accounting@transendlogistics.com','', ''],
         'Beemac Logistics':['beemaclogistics@noa.triumphpay.com','', ''],
         'Deploy Solutions (dba of CWH LLC)':['marzenae@deploysolutionsgroup.com; ap@deploysolutionsgroup.com','', ''],
-        'Heniff Logistics LLC':['eblackman@heniff.com','EPAY', ''],
+        'Heniff Logistics LLC':['eblackman@heniff.com','', ''],
         'Hirschbach Transportation Services Inc - IA':['NOA@hirschbach.com','', ''],
         'Smartway Transportation / Overland Park, KS':['smartwaytransportationllc@noa.triumphpay.com','', ''],
         'Taimen Transport LLC':['ap@taimentransport.com; ship@taimentransport.com','', ''],
@@ -105,22 +105,74 @@ Adaptación_deudores = {
         'Navajo Express Inc':['carrierpaystatus@navajo.com','', ''],
         'Ruan Transport Corporation':['carrierbilling@ruan.com; freightaudit@ruan.com; carrierprocurement@ruan.com','', ''],
         'Rubicon Transportation LLC':['payments@rubicontransportation.com; rubicon@noa.triumphpay.com','', ''],
-        'Ship Amino LLC dba OGRE-S':['ap@shipamino.com; shipamino@noa.triumphpay.com','', ''],
+        'Ship Amino LLC dba OGRE-S':['ap@shipamino.com; shipamino@noa.triumphpay.com; invoice@shipamino.com','', ''],
         'RJS Logistics, Inc.':['billing@rjslogistics.com; payment@rjslogistics.com','', ''],
         'Best Logistic Services aka Reich Logistics services Inc':['NOA@shipwithbest.com','', ''],
+        'Longship (dba of Quality Logistics LLC)':['longship@noa.triumphpay.com; accounting@longship.us','', ''],
+        'Emerge Transportation dba of Emergetech Inc':['Noa@emergemarket.com','', ''],
+        'First Call Logistics, LLC.':['	firstcallrn@noa.triumphpay.com;accounting@gofclogistics.com','', ''],
+        'FLS TRANSPORTATION SVCS':['flstransportation@noa.triumphpay.com; ap@flstransport.com','', ''],
+        'HD Shipping Solutions LLC':['paperwork@hdships.com','', ''],
+        'Integrity Express Logistics':['intxlog@noa.triumphpay.com','', ''],
+        'Landstar Ranger Inc':['carriermaintenance@landstar.com','', ''],
+        'Motus Freight LLC':['MotusFreight@noa.triumphpay.com','', ''],
+        'Raven Cargo Inc':['ravencargo@noa.triumphpay.com;accounting@raven-cargo.com','', ''],
+        'Sage Freight LLC':['sagefreight@noa.triumphpay.com','', ''],
+        'Trinity Logistics Inc - DE':['trinitylogistics@noa.triumphpay.com','', ''],
+        'Brock LLC dba Brock Transportation LLC':['accounting@brockweb.com','', ''],
+        'RXO / XPO - NC':['rxo@noa.triumphpay.com','', ''],
+        'Ryan Transportation Service, Inc.':['ryanap@ryantrans.com','', ''],
+        'Stonearch Logistics, LLC.':['stonearchlogistics@noa.triumphpay.com; acct@stonearchlogistics.com','', ''],
+        'Select Transport Partners LLC':['ap@goselect.com','', ''],
+        'King of Freight LLC':['carrierrelations@kingoffreight.com','', ''],
+        'Logistic Dynamics LLC':['CarrierDev@ShipLDi.com','', ''],
+        'Hope Transportation':['hopetransportation@noa.triumphpay.com; payables@hopetrans.com','', ''],
+        'OTR TRANSPORTATION':['accountspayable@loadotr.com; ap@loadotr.com','', ''],
+        'Triple T Transport Inc':['AP@tripleTTransport.com','', ''],
+        'Pivot Supply Chain Solutions':['accounting@loadpivot.com','', ''],
+        'RJ LOGISTICS ASSETS, LLC':['RJLogistics@noa.triumphpay.com','', ''],
+        'Reinsfelder Inc':['billing@reinsfelder.com','', ''],
+        'Neon Logistics LLC':['neon@noa.triumphpay.com','', ''],
+        'Core Logistics Brokerage LLC':['corelogistics@noa.triumphpay.com','', ''],
+        'Edge Logistics LLC':['paperwork@edgelogistics.com; edgelogistics@noa.triumphpay.com; accounting@edgelogistics.com','', ''],
+        'Emerge Transportation dba of Emergetech Inc':['Loaddocs@emergemarket.com; noa@emergemarket.com','', ''],
+        'Freight All Kinds, LLC':['ap@fakinc.com; assignments@fakinc.com; paperwork@fakinc.com','', ''],
+        'Landstar Transportation Logistics, Inc':['carriermaintenance@landstar.com','', ''],
+        'United Transportation Services Inc':['UnitedTransportation@noa.triumphpay.com; accounting@shiputs.net','', ''],
+        'Wel Companies Inc':['wel.logisticsap@WELCOMPANIES.com','', ''],
+        'XTL Logistics USA Inc':['cbtinc@noa.triumphpay.com;invoices.us@xtl.com','', ''],
+        'Nolan Transportation Group LLC':['pod@ntgfreight.com;payables@ntgfreight.com','', ''],
+        'Jarrett Logistics Systems':['accounting@gojarrettlogistics.com','', ''],
+        'TAB LLC dba of TA Brokerage LLC':['TABACCOUNTING@ARTUREXPRESS.COM','', ''],
+        "Leonard's Express Inc":['ap@leonardsexpress.com;leitrips@leonardsexpress.com','',''],
+        'Southwest Logistics Management-Oklahoma':['ap@sw-logitics;chthompson@sw-logistics.com;cbellamy@sw-logistics.com','', ''],
+        'Premier Global Transportation LLC':['accounting@premierglobaltransportation.com','', ''],
+        'Tin Goose Logistics LLC':['ap@tingooselogistics.com','', ''],
+        'Value Logistics LLC - TX':['getpaid@valuetruckaz.com','', ''],
+        'Pathmark Transportation':['apinquiries@pathmarktrans.com','', ''],
+        'NFI Logistics LLC (dba of National Freight Truck Lines Inc)':['RELAYINVOICES@nfiindustries.com; nfi@noa.triumphpay.com; carrier.relations@nfiindustries.com','', ''],
+        'Native American Worldwide Logistics LLC':['freightbills@nalww.com; Krista.monroe@nalww.com','', ''],
+        'MLM Supply Chain LLC':['wschneider@mlmtrans.com; kristy.larson@mlmtrucking.com','', ''],
+        'MountainMovers Transportation & Logistics':['acct@mountainmoverstl.com;status@mountainmoverstl.com','', ''],
+        'Martins Refrigerated Express Inc':['dedel@martinmilk.com ; BILLINGMRE@martinmilk.com','', ''],
+        'High Tide Logistics LLC - IL':['hightide@noa.triumphpay.com; ap@hightidelogistics.com;invoices@hightidelogistics.com','', ''],
+        'UCW Logistics':['UCW@noa.triumphpay.com','', ''],
+        'HTL Freight Heritage Trucking Matchmaker Logistics':['htlfreight@noa.triumphpay.com;dkalejr@bellsouth.net;billing@htlfreight.com','', ''],
+        
+
 }
-"""     
+""" 
+        '':['','', ''],
+        '':['','', ''],
+        '':['','', ''],
+        '':['','', ''],
+        '':['','', ''],
+        '':['','', ''],
+        '':['','', ''],
+        '':['','', ''],
         
-        
-        
-       
-        '':['','', ''],
-        '':['','', ''],
-        '':['','', ''],
-        '':['','', ''],
-        '':['','', ''],
-        '':['','', ''],
-                
+
+               
         {'accounting@journeyfreight.com':'apinquiries@journeyfreight.com'},"""
         
 
@@ -140,6 +192,7 @@ if decision == True:
                 print("Creacion del nuevo archivo con la columna 'CA NOTES' sin errores")
                 df_hoy.replace(Palabras_reemplazo, inplace=True, regex=False)
                 
+
 
                 print("Reemplazo de texto específico completado")
                 time.sleep(5)
@@ -174,7 +227,7 @@ if decision == True:
         """FILTRO DE REGISTROS PARA ENVIAR CORREO"""
 
         try:    
-                Condicion1 = df_hoy['CSR'] == 'VGUERRERO'
+                Condicion1 = df_hoy['CSR'] == 'MPALMER'
                 Condicion2 = df_hoy['CA NOTES'].isna()
                 df_correos_enviar = df_hoy[(Condicion1) & (Condicion2)].copy()
                 size = df_correos_enviar['Last PO #'].size
@@ -190,7 +243,7 @@ else:
 
         try:    
 
-                Condicion1 = df_hoy['CSR'] == 'VGUERRERO'
+                Condicion1 = df_hoy['CSR'] == 'MPALMER'
                 Condicion2 = df_hoy['CA NOTES'].isna()
                 df_correos_enviar = df_hoy[(Condicion1) & (Condicion2)].copy()
                 size = df_correos_enviar['Last PO #'].size

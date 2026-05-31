@@ -9,43 +9,40 @@ onedrive_path = os.path.expanduser('~\\OneDrive - C.R. England\\Documents')
 date_name = date.weekday(date.today())
 directorio_actual = os.path.dirname(__file__)
 hoy = date.today()
-fecha_hoy = hoy.strftime("%m-%d-%y")
-fecha_ayer = hoy - timedelta(days=1)
-fecha_ayer = fecha_ayer.strftime("%m-%d-%y")
-
 terminacion_archivo_procesado = "_ECS_Factoring_NOARecdDate_Procesado.xlsx"
 terminacion_archivo_sin_procesar = "_ECS_Factoring_NOARecdDate.xlsx"
 
 """Rutas de Martes a Viernes"""
-ruta_descargar_excel_ayer = os.path.join(onedrive_path, fecha_ayer + terminacion_archivo_procesado)
-ruta_excel_ayer_sin_procesar = os.path.join(directorio_actual,"..","data",fecha_ayer +terminacion_archivo_sin_procesar)
+#ruta_descargar_excel_ayer = os.path.join(onedrive_path, fecha_ayer + terminacion_archivo_procesado)
+#ruta_excel_ayer_sin_procesar = os.path.join(directorio_actual,"..","data",fecha_ayer +terminacion_archivo_sin_procesar)
 
 
 
 def carga_archivos_excel():
-
+    date_name = date.weekday(date.today())
+    hoy = date.today()
     if date_name == 6: #Domingo
-        fecha_hoy = hoy - timedelta(days=2)
-        fecha_ayer = fecha_hoy - timedelta(days=1)
+        fecha_hoy = hoy-timedelta(days=2)
+        fecha_ayer = hoy-timedelta(days=3)
         print("Hoy es Domingo, se cargaran los archivos de Viernes")
         time.sleep(5)
     elif date_name == 5: #Sabado
         fecha_hoy = hoy - timedelta(days=1)
-        fecha_ayer = fecha_hoy - timedelta(days=1)
+        fecha_ayer = hoy - timedelta(days=2)
         print("Hoy es Sabado, se cargaran los archivos de Viernes")
         time.sleep(5)
     elif date_name == 0: #Lunes
         fecha_hoy = hoy
-        fecha_ayer = fecha_hoy - timedelta(days=3)
+        fecha_ayer = hoy - timedelta(days=3)
         print("Hoy es Lunes, se cargaran los archivos de Lunes y Viernes")
         time.sleep(5)
     else:
-        fecha_hoy = hoy
-        fecha_ayer = hoy - timedelta(days=1)
-        print("Hoy es un dia entre Martes y Viernes, se cargaran los archivos de hoy y ayer")
-        time.sleep(5)
+            fecha_hoy = hoy
+            fecha_ayer = hoy - timedelta(days=1)
+            print("Hoy es un dia entre Martes y Viernes, se cargaran los archivos de hoy y ayer")
+            time.sleep(5)
 
-    fecha_hoy = hoy.strftime("%m-%d-%y")
+    fecha_hoy = fecha_hoy.strftime("%m-%d-%y")
     fecha_ayer = fecha_ayer.strftime("%m-%d-%y")
 
     ruta_descargar_excel_hoy_sin_procesar = os.path.join(onedrive_path, fecha_hoy + terminacion_archivo_sin_procesar)
