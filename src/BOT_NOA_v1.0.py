@@ -35,6 +35,8 @@ Ruta_nube_archivo_procesado = onedrive_path + '\\' + fecha_hoy + terminacion_arc
 
 df_columns_to_drop = ['NOA Rec Date', 'NOA Assigment', 'NOA Sent', 'NOA Sent User','Debtor NOA Document','CSR.1', 'Office','Notice', 'Notice Contact Email','NOA Entered Date', 'Last Inv Date', 'Last Inv #', 'First Inv Date', 'Relationship Age', 'First Funded', 'Client Age', 'Funded Balance', 'Non Funded Balance']
 Palabras_Buscar = ["noa", "doesnt verify", "@noa.triumphpay", "web", "triumphpay", "website", "use triumph pay", "triumph", "tp", "epay"]
+nombres_no_touch = ["avensis energy services, llc", "metro parcel & freight inc", "mvk transport corporation", "cmd energy, llc"]
+
 
 """Definicion de funciones"""
 
@@ -61,6 +63,25 @@ Palabras_reemplazo = {
 }
 
 columnas_a_modificar = ['Debtor Email Address', 'Attention Note', 'Warning Note']
+
+while True:
+        try:
+                CSR_INPUT = input("Porfavor seleccione el CSR que desea procesar: 1.VGUERRERO 2.MPALMER 3.SPAREDES")
+
+                if CSR_INPUT == '1':
+                        CSR_name = 'VGUERRERO'
+                        break
+                elif CSR_INPUT == '2':
+                        CSR_name = 'MPALMER'
+                        break
+                elif CSR_INPUT == '3':
+                        CSR_name = 'SPAREDES'
+                        break                        
+                else: 
+                        raise ValueError("Entrada no válida. Por favor, seleccione 1, 2 o 3.")
+                
+        except ValueError:
+                print("Entrada no válida. Por favor, seleccione 1, 2 o 3.")
 
 Adaptación_deudores = {
 
@@ -227,7 +248,8 @@ if decision == True:
         """FILTRO DE REGISTROS PARA ENVIAR CORREO"""
 
         try:    
-                Condicion1 = df_hoy['CSR'] == 'MPALMER'
+
+                Condicion1 = df_hoy['CSR'] == CSR_name
                 Condicion2 = df_hoy['CA NOTES'].isna()
                 df_correos_enviar = df_hoy[(Condicion1) & (Condicion2)].copy()
                 size = df_correos_enviar['Last PO #'].size
@@ -243,7 +265,7 @@ else:
 
         try:    
 
-                Condicion1 = df_hoy['CSR'] == 'MPALMER'
+                Condicion1 = df_hoy['CSR'] == CSR_name
                 Condicion2 = df_hoy['CA NOTES'].isna()
                 df_correos_enviar = df_hoy[(Condicion1) & (Condicion2)].copy()
                 size = df_correos_enviar['Last PO #'].size
@@ -268,14 +290,17 @@ for indice, fila in df_correos_enviar.iterrows():
         
         nota_attention = str(fila['Attention Note']).lower()
         nota_warning = str(fila['Warning Note']).lower()
-        
+        correos_no_touch = str(fila['Client Name']).lower()
+        correos_englandlogistics = str(fila['Debtor Email Address']).lower()
 
         """ciclos para verificar el valor de las celdas no tiene palabras de atencion."""
+        tiene_nombre_no_touch = any(palabra in correos_no_touch for palabra in nombres_no_touch)
 
         tiene_palabra_attention = any(palabra in nota_attention for palabra in Palabras_Buscar)
         tiene_palabra_warning = any(palabra in nota_warning for palabra in Palabras_Buscar)
+        
         correo_nulo = pd.isna(fila['Debtor Email Address'])
-        correos_englandlogistics = str(fila['Debtor Email Address']).lower()
+        
 
         print(f"Procesando correo para {Client_Name} , con la carga {PO_Number}")
 
@@ -296,8 +321,12 @@ for indice, fila in df_correos_enviar.iterrows():
                 #time.sleep(5)
                 print(f"Correo no enviado, checar manualmente")
                 continue
-
-
+        
+        elif tiene_nombre_no_touch:
+                df_correos_enviar.at[indice, 'CA NOTES'] = 'Cliente no touch'
+                #time.sleep(5)
+                print(f"No touch cliente, correo no enviado")
+                continue
         try:
                 correo.To = Email_Destinatario
                 correo.Subject = f"PLEASE REPLY NOA confirmation required {Client_Name} // MC {MC_number} // Load {PO_Number}"
@@ -316,11 +345,16 @@ Thank you and have a great day! 🙂
                 ruta_attachment = os.path.join(directorio_actual,"..","attachments",Client_Name + " - NOA.pdf" )
                 correo.Attachments.Add(ruta_attachment)
                 correo.importance = 2
-                #correo.Send()
+                correo.Send()
                 #correo.Display()
-                df_correos_enviar.at[indice, 'CA NOTES'] = f'{fecha_hoy} SENT'
-                #time.sleep(3)
-                #input("Press Enter to continue to the next email...")
+                if '@noa.triumphpay.com' in correos_englandlogistics: 
+                        df_correos_enviar.at[indice, 'CA NOTES'] = f'{fecha_hoy} SENT to TP'
+                        time.sleep(2)
+                        print(f"Correo enviado a Triumphpay")
+                else:
+                        df_correos_enviar.at[indice, 'CA NOTES'] = f'{fecha_hoy} SENT'
+                        time.sleep(2)
+                        #input("Press Enter to continue to the next email...")
 
               
         except pywintypes.com_error as e:
