@@ -176,11 +176,19 @@ Adaptación_deudores = {
         'MLM Supply Chain LLC':['wschneider@mlmtrans.com; kristy.larson@mlmtrucking.com','', ''],
         'MountainMovers Transportation & Logistics':['acct@mountainmoverstl.com;status@mountainmoverstl.com','', ''],
         'Martins Refrigerated Express Inc':['dedel@martinmilk.com ; BILLINGMRE@martinmilk.com','', ''],
-        'High Tide Logistics LLC - IL':['hightide@noa.triumphpay.com; ap@hightidelogistics.com;invoices@hightidelogistics.com','', ''],
+        'High Tide Logistics LLC - IL':[' hightide@noa.triumphpay.com; ap@hightidelogistics.com','', ''],
         'UCW Logistics':['UCW@noa.triumphpay.com','', ''],
         'HTL Freight Heritage Trucking Matchmaker Logistics':['htlfreight@noa.triumphpay.com;dkalejr@bellsouth.net;billing@htlfreight.com','', ''],
-        
-
+        'Schmieding Produce / HC Schmieding Produce':['ap@Schmieding.com','', ''],
+        'Standard Transportation Services, Inc.':['ap@standardtransinc.com; mtilton@stdtrans.com; ap@stdtrans.com','', ''],
+        'Fuel Transport Inc.':['acctspayable@fueltransport.com; billing@fueltransport.com','', ''],
+        'Corporate Traffic (FL)':['carrierinvoices@corporatetraffic.com; corporatetraffic@noa.triumphpay.com','', ''],
+        'Ally Logistics LLC':['docs@allylogistics.com; AP@allylogistics.com ;allylogistics@noa.triumphpay.com','', ''],
+        'Colossal Transport Solutions, LLC':['carrierinvoicing@colossaltransport.com','', ''],
+        'CTS Logistics Solutions Texas':['accounting@ctsls-usa.com','', ''],
+        'Quality Freight Logistics,Inc':['qualityfreight@noa.triumphpay.com; info@qflteam.com','', ''],
+        'Open Road Transportation':['openroad@noa.triumphpay.com; noa@openroadtrans.com','', ''],
+        'BBI Logistics LLC':['invoices@bbilogistics.com;paymentstatus@bbilogistics.com;ap@bbilogistics.com','', ''],
 }
 """ 
         '':['','', ''],
