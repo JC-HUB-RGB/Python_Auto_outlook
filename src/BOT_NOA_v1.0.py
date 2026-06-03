@@ -57,8 +57,6 @@ Palabras_reemplazo = {
         'paperwrok@englandlogistics.com':'',
         'Mehreen Enterprises LTD (US Currency) (WIRE ONLY)':'Mehreen Enterprises LTD',
         'MVI Transport (dba Main Venture Investing LLC) ACH preference':'MVI Transport (dba Main Venture Investing LLC)',
-        '24X7 Riders Transport Inc (CAD CURRENCY)':'24X7 Riders Transport Inc',
-        'Canadian Transport Network Inc (CAD Currency)':'Canadian Transport Network Inc',
         'HS Carrier LLC - RTP ONLY':'HS Carrier LLC',
 }
 
@@ -181,8 +179,7 @@ Adaptación_deudores = {
         'HTL Freight Heritage Trucking Matchmaker Logistics':['htlfreight@noa.triumphpay.com;dkalejr@bellsouth.net;billing@htlfreight.com','', ''],
         'Schmieding Produce / HC Schmieding Produce':['ap@Schmieding.com','', ''],
         'Standard Transportation Services, Inc.':['ap@standardtransinc.com; mtilton@stdtrans.com; ap@stdtrans.com','', ''],
-        'Fuel Transport Inc.':['acctspayable@fueltransport.com; billing@fueltransport.com','',
-                                ''],
+        'Fuel Transport Inc.':['acctspayable@fueltransport.com; billing@fueltransport.com','',''],
         'Corporate Traffic (FL)':['carrierinvoices@corporatetraffic.com; corporatetraffic@noa.triumphpay.com','', ''],
         'Ally Logistics LLC':['docs@allylogistics.com; AP@allylogistics.com ;allylogistics@noa.triumphpay.com','', ''],
         'Colossal Transport Solutions, LLC':['carrierinvoicing@colossaltransport.com','', ''],
@@ -202,6 +199,10 @@ Adaptación_deudores = {
         'SPC Transport Co.':['billing@spctran.com;Dhartford@spctran.com','', ''],
         'Unicron Logistics Solutions':['unicronlogistics@gmail.com','', ''],
         'Drover Logistics Group LLC':['ap@shipdrover.com','', ''],
+        'ATS Advance Transportation Systems - OH':['Jan@atstrans.com','', ''],
+        'Lipsey Logistics Worldwide - TN':['apinquiry@lipseylogistics.com','', ''],
+        'Nolan Transportation Group Inc.- FL':['payables@ntgfreight.com','', ''],
+        'Red River Logistics LLC':['redriver@noa.triumphpay.com; ap@redriverlogistics.com; Brokerage@redriverlogistics.com','', ''],
 
 }
 """ 
