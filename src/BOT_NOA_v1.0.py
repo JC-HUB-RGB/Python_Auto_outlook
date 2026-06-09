@@ -12,6 +12,10 @@ import Cargador_de_archivos as CA
 
 """Info general"""
 
+df_adaptacion = pd.DataFrame()
+df_adaptacion = pd.read_excel(r"C:\Users\cokek\OneDrive - C.R. England\Documents\Debtors Info.xlsx")
+
+
 onedrive_path = os.path.expanduser('~\\OneDrive - C.R. England\\Documents')
 
 date_name = date.weekday(date.today())
@@ -64,7 +68,7 @@ columnas_a_modificar = ['Debtor Email Address', 'Attention Note', 'Warning Note'
 
 while True:
         try:
-                CSR_INPUT = input("Porfavor seleccione el CSR que desea procesar: 1.VGUERRERO 2.MPALMER 3.SPAREDES")
+                CSR_INPUT = input("Porfavor seleccione el CSR que desea procesar: 1.VGUERRERO 2.MPALMER 3.SPAREDES \n")
 
                 if CSR_INPUT == '1':
                         CSR_name = 'VGUERRERO'
@@ -81,130 +85,7 @@ while True:
         except ValueError:
                 print("Entrada no válida. Por favor, seleccione 1, 2 o 3.")
 
-Adaptación_deudores = {
 
-        'AM Trans Expedite Inc - IL':['noa@fusiontransport.com', '', ''],
-        'AM Trans Expedite Inc - NJ':['noa@fusiontransport.com', '', ''],
-        'Challenger Motor Freight Inc':['vendorsetup@challenger.com', '', ''],
-        'Challenger Logistics Inc - ON':['vendorsetup@challenger.com', '', ''],
-        'US Logistics LLC':['uslogisticsllc@noa.triumphpay.com', '', ''],
-        'Transplace Texas LP - KY':['transplacestuttgart@noa.triumphpay.com', '', ''],
-        'Paul Logistics Inc':['Paullog@noa.triumphpay.com', '', ''],
-        'Drover Logistics Corp':['team@shipdrover.com;ap@shipdrover.com', '', ''],
-        'Ari Logistics LLC dba Action Enterprise Logistics':['ari.ap@actn.com; action@noa.triumphpay.com', '', ''],
-        'ITS National LLC dba ITS National':['inquiries@its4logistics.com; cody.chapman@its4logistics.com', '', ''],
-        'Transportation One - IL':['paymentstatus@transportationone.com; billing@transportationone.com', '', ''],
-        'Scotlynn USA Division Inc':['paystatus@scotlynn.com','',''],
-        'Spot Freight Inc':['paymentstatus@spotinc.com','',''],
-        'Frontline Logistics':['cvella@frontlinelogistics.com','',''],
-        'Jear Logistics LLC':['jear@noa.triumphpay.com','','',],
-        'Transend Logistics LLC -IL':['dmims@transendlogistics.com','',''],
-        'Mohawk Global Logistics':['mstoddard@mohawkglobal.com','', ''],
-        'R2 LOGISTICS':['carrierservices@r2logistics.com','EPAY', ''],
-        'Venture Connect / Transcorr Ntl Logistics LLC':['carrierinv@venturelogistics.com; paystatus@venturelogistics.com','', ''],
-        'Andover Logistics LLC':['mark@andoverlogistics.com;accounting@andoverlogistics.com','EPAY', ''],
-        'Synchrogistics LLC - NC':['accounting@synchrogistics.com', '', ''],
-        'Circle Logistics Inc - IN':['PAYSTATUS@CIRCLEDELIVERS.COM','', ''],
-        'Unlimited Logistics LLC':['noa@unlimitedlogistics.com','', ''],
-        'Estrella Dispatch Inc':['Estrelladispatch@noa.triumphpay.com; ap@estrelladispatch.com','',''],
-        'R2 LOGISTICS':['cs@r2logistics.com','', ''],
-        'Titanium American Logistics':['TITANIUM@noa.triumphpay.com','', ''],
-        'Transend Logistics LLC -IL':['dmims@transendlogistics.com; accounting@transendlogistics.com','', ''],
-        'Beemac Logistics':['beemaclogistics@noa.triumphpay.com','', ''],
-        'Deploy Solutions (dba of CWH LLC)':['marzenae@deploysolutionsgroup.com; ap@deploysolutionsgroup.com','', ''],
-        'Heniff Logistics LLC':['eblackman@heniff.com','', ''],
-        'Hirschbach Transportation Services Inc - IA':['NOA@hirschbach.com','', ''],
-        'Smartway Transportation / Overland Park, KS':['smartwaytransportationllc@noa.triumphpay.com','', ''],
-        'Taimen Transport LLC':['ap@taimentransport.com; ship@taimentransport.com','', ''],
-        'Traffic Tech Inc -IL':['ap@traffictech.com; noa@traffictech.com','', ''],
-        'West Michigan Transport LLC dba Windmill Transport':['windmilltransport@noa.triumphpay.com','', ''],
-        'England Logistics Inc':['','', ''],
-        'Specialized Transport  Co':['','', ''],
-        'Chief Logistics, LLC':['accounting@chieflogistics.com; claudia@chieflogistics.com','', ''],
-        'Navajo Express Inc':['carrierpaystatus@navajo.com','', ''],
-        'Ruan Transport Corporation':['carrierbilling@ruan.com; freightaudit@ruan.com; carrierprocurement@ruan.com','', ''],
-        'Rubicon Transportation LLC':['payments@rubicontransportation.com; rubicon@noa.triumphpay.com','', ''],
-        'Ship Amino LLC dba OGRE-S':['ap@shipamino.com; shipamino@noa.triumphpay.com; invoice@shipamino.com','', ''],
-        'RJS Logistics, Inc.':['billing@rjslogistics.com; payment@rjslogistics.com','', ''],
-        'Best Logistic Services aka Reich Logistics services Inc':['NOA@shipwithbest.com','', ''],
-        'Longship (dba of Quality Logistics LLC)':['longship@noa.triumphpay.com; accounting@longship.us','', ''],
-        'Emerge Transportation dba of Emergetech Inc':['Noa@emergemarket.com','', ''],
-        'First Call Logistics, LLC.':['	firstcallrn@noa.triumphpay.com;accounting@gofclogistics.com','', ''],
-        'FLS TRANSPORTATION SVCS':['flstransportation@noa.triumphpay.com; ap@flstransport.com','', ''],
-        'HD Shipping Solutions LLC':['paperwork@hdships.com','', ''],
-        'Integrity Express Logistics':['intxlog@noa.triumphpay.com','', ''],
-        'Landstar Ranger Inc':['carriermaintenance@landstar.com','', ''],
-        'Motus Freight LLC':['MotusFreight@noa.triumphpay.com','', ''],
-        'Raven Cargo Inc':['ravencargo@noa.triumphpay.com;accounting@raven-cargo.com','', ''],
-        'Sage Freight LLC':['sagefreight@noa.triumphpay.com','', ''],
-        'Trinity Logistics Inc - DE':['trinitylogistics@noa.triumphpay.com','', ''],
-        'Brock LLC dba Brock Transportation LLC':['accounting@brockweb.com','', ''],
-        'RXO / XPO - NC':['rxo@noa.triumphpay.com','', ''],
-        'Ryan Transportation Service, Inc.':['ryanap@ryantrans.com','', ''],
-        'Stonearch Logistics, LLC.':['stonearchlogistics@noa.triumphpay.com; acct@stonearchlogistics.com','', ''],
-        'Select Transport Partners LLC':['ap@goselect.com','', ''],
-        'King of Freight LLC':['carrierrelations@kingoffreight.com','', ''],
-        'Logistic Dynamics LLC':['CarrierDev@ShipLDi.com','', ''],
-        'Hope Transportation':['hopetransportation@noa.triumphpay.com; payables@hopetrans.com','', ''],
-        'OTR TRANSPORTATION':['accountspayable@loadotr.com; ap@loadotr.com','', ''],
-        'Triple T Transport Inc':['AP@tripleTTransport.com','', ''],
-        'Pivot Supply Chain Solutions':['accounting@loadpivot.com','', ''],
-        'RJ LOGISTICS ASSETS, LLC':['RJLogistics@noa.triumphpay.com','', ''],
-        'Reinsfelder Inc':['billing@reinsfelder.com','', ''],
-        'Neon Logistics LLC':['neon@noa.triumphpay.com','', ''],
-        'Core Logistics Brokerage LLC':['corelogistics@noa.triumphpay.com','', ''],
-        'Edge Logistics LLC':['paperwork@edgelogistics.com; edgelogistics@noa.triumphpay.com; accounting@edgelogistics.com','', ''],
-        'Emerge Transportation dba of Emergetech Inc':['Loaddocs@emergemarket.com; noa@emergemarket.com','', ''],
-        'Freight All Kinds, LLC':['ap@fakinc.com; assignments@fakinc.com; paperwork@fakinc.com','', ''],
-        'Landstar Transportation Logistics, Inc':['carriermaintenance@landstar.com','', ''],
-        'United Transportation Services Inc':['UnitedTransportation@noa.triumphpay.com; accounting@shiputs.net','', ''],
-        'Wel Companies Inc':['wel.logisticsap@WELCOMPANIES.com','', ''],
-        'XTL Logistics USA Inc':['cbtinc@noa.triumphpay.com;invoices.us@xtl.com','', ''],
-        'Nolan Transportation Group LLC':['pod@ntgfreight.com;payables@ntgfreight.com','', ''],
-        'Jarrett Logistics Systems':['accounting@gojarrettlogistics.com','', ''],
-        'TAB LLC dba of TA Brokerage LLC':['TABACCOUNTING@ARTUREXPRESS.COM','', ''],
-        "Leonard's Express Inc":['ap@leonardsexpress.com;leitrips@leonardsexpress.com','',''],
-        'Southwest Logistics Management-Oklahoma':['ap@sw-logitics;chthompson@sw-logistics.com;cbellamy@sw-logistics.com','', ''],
-        'Premier Global Transportation LLC':['accounting@premierglobaltransportation.com','', ''],
-        'Tin Goose Logistics LLC':['ap@tingooselogistics.com','', ''],
-        'Value Logistics LLC - TX':['getpaid@valuetruckaz.com','', ''],
-        'Pathmark Transportation':['apinquiries@pathmarktrans.com','', ''],
-        'NFI Logistics LLC (dba of National Freight Truck Lines Inc)':['RELAYINVOICES@nfiindustries.com; nfi@noa.triumphpay.com; carrier.relations@nfiindustries.com','', ''],
-        'Native American Worldwide Logistics LLC':['freightbills@nalww.com; Krista.monroe@nalww.com','', ''],
-        'MLM Supply Chain LLC':['wschneider@mlmtrans.com; kristy.larson@mlmtrucking.com','', ''],
-        'MountainMovers Transportation & Logistics':['acct@mountainmoverstl.com;status@mountainmoverstl.com','', ''],
-        'Martins Refrigerated Express Inc':['dedel@martinmilk.com ; BILLINGMRE@martinmilk.com','', ''],
-        'High Tide Logistics LLC - IL':[' hightide@noa.triumphpay.com; ap@hightidelogistics.com','', ''],
-        'UCW Logistics':['UCW@noa.triumphpay.com','', ''],
-        'HTL Freight Heritage Trucking Matchmaker Logistics':['htlfreight@noa.triumphpay.com;dkalejr@bellsouth.net;billing@htlfreight.com','', ''],
-        'Schmieding Produce / HC Schmieding Produce':['ap@Schmieding.com','', ''],
-        'Standard Transportation Services, Inc.':['ap@standardtransinc.com; mtilton@stdtrans.com; ap@stdtrans.com','', ''],
-        'Fuel Transport Inc.':['acctspayable@fueltransport.com; billing@fueltransport.com','',''],
-        'Corporate Traffic (FL)':['carrierinvoices@corporatetraffic.com; corporatetraffic@noa.triumphpay.com','', ''],
-        'Ally Logistics LLC':['docs@allylogistics.com; AP@allylogistics.com ;allylogistics@noa.triumphpay.com','', ''],
-        'Colossal Transport Solutions, LLC':['carrierinvoicing@colossaltransport.com','', ''],
-        'CTS Logistics Solutions Texas':['accounting@ctsls-usa.com','', ''],
-        'Quality Freight Logistics,Inc':['qualityfreight@noa.triumphpay.com; info@qflteam.com','', ''],
-        'Open Road Transportation':['openroad@noa.triumphpay.com; noa@openroadtrans.com','', ''],
-        'BBI Logistics LLC':['invoices@bbilogistics.com;paymentstatus@bbilogistics.com;ap@bbilogistics.com','', ''],
-        'Universal Freight Systems Inc':['invoicesubmission@ufsystems.com; universalfreight@noa.triumphpay.com','', ''],
-        'Archer Cargo LLC':['accounting@archercargo.net','', ''],
-        'Five Star Trucking Ltd':['invoices@fivestartrucking.com;ap@fivestartrucking.com','', ''],
-        'Flock Freight Inc':['documents@flockfreight.com','', ''],
-        'Johanson Transportation Service':['factoringNOA@johansontrans.com','', ''],
-        'Kingsgate Logistics Inc':['accounting@kingsgatelogistics.com','', ''],
-        'Mode Transportation LLC - Dallas':['factornotice@modetransportation.com','', ''],
-        'Reliable Transportation Solutions':['ap@relyonrts.com','', ''],
-        'ROCK CITY LOGISTICS, LLC':['rockcitylogistics@noa.triumphpay.com','', ''],
-        'SPC Transport Co.':['billing@spctran.com;Dhartford@spctran.com','', ''],
-        'Unicron Logistics Solutions':['unicronlogistics@gmail.com','', ''],
-        'Drover Logistics Group LLC':['ap@shipdrover.com','', ''],
-        'ATS Advance Transportation Systems - OH':['Jan@atstrans.com','', ''],
-        'Lipsey Logistics Worldwide - TN':['apinquiry@lipseylogistics.com','', ''],
-        'Nolan Transportation Group Inc.- FL':['payables@ntgfreight.com','', ''],
-        'Red River Logistics LLC':['redriver@noa.triumphpay.com; ap@redriverlogistics.com; Brokerage@redriverlogistics.com','', ''],
-
-}
 """ 
         '':['','', ''],
         '':['','', ''],
@@ -243,9 +124,11 @@ if decision == True:
                 df_ayer = df_ayer.drop_duplicates(subset=['Last PO #'], keep='last')
                 df_hoy = df_hoy.drop_duplicates(subset=['Last PO #'], keep='last')
                 try:
-                        for deudor, lista_valores in Adaptación_deudores.items():
+                        for indice, fila in df_adaptacion.iterrows():
                                 #print(f'Remplazo de texto para deudor {deudor}')
-                                df_hoy.loc[df_hoy['Debtor Name'] == deudor, columnas_a_modificar] = lista_valores
+                                deudor_real = fila['Debtor Name']
+                                valores_reemplazo = fila[columnas_a_modificar].values
+                                df_hoy.loc[df_hoy['Debtor Name'] == deudor_real, columnas_a_modificar] = valores_reemplazo
 
                 except Exception as e :
                         print("Error cambiando valores de debtors")
@@ -368,7 +251,7 @@ Thank you and have a great day! 🙂
                 ruta_attachment = os.path.join(directorio_actual,"..","attachments",Client_Name + " - NOA.pdf" )
                 correo.Attachments.Add(ruta_attachment)
                 correo.importance = 2
-                correo.Send()
+                #correo.Send()
                 #correo.Display()
                 if '@noa.triumphpay.com' in correos_englandlogistics: 
                         df_correos_enviar.at[indice, 'CA NOTES'] = f'{fecha_hoy} SENT to TP'

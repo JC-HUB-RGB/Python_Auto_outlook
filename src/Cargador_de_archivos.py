@@ -45,7 +45,7 @@ def carga_archivos_excel():
     fecha_hoy = fecha_hoy.strftime("%m-%d-%y")
     fecha_ayer = fecha_ayer.strftime("%m-%d-%y")
 
-    ruta_descargar_excel_hoy_sin_procesar = os.path.join(onedrive_path, fecha_hoy + terminacion_archivo_sin_procesar)
+    ruta_descargar_excel_hoy_sin_procesar = os.path.join(onedrive_path, "FILE NOA RAW", fecha_hoy + terminacion_archivo_sin_procesar)
     ruta_descargar_excel_hoy_procesado = os.path.join(onedrive_path, fecha_hoy + terminacion_archivo_procesado)
     ruta_excel_hoy_sin_procesar = os.path.join(directorio_actual,"..","data",fecha_hoy +terminacion_archivo_sin_procesar)
     ruta_excel_hoy_procesado = os.path.join(directorio_actual,"..","data",fecha_hoy+terminacion_archivo_procesado)
