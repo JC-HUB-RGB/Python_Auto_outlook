@@ -68,7 +68,7 @@ columnas_a_modificar = ['Debtor Email Address', 'Attention Note', 'Warning Note'
 
 while True:
         try:
-                CSR_INPUT = input("Porfavor seleccione el CSR que desea procesar: 1.VGUERRERO 2.MPALMER 3.SPAREDES \n")
+                CSR_INPUT = input("Porfavor seleccione el CSR que desea procesar: 1.VGUERRERO 2.MPALMER 3.SPAREDES 4.BSANCHEZ 5.jehoug \n")
 
                 if CSR_INPUT == '1':
                         CSR_name = 'VGUERRERO'
@@ -78,30 +78,22 @@ while True:
                         break
                 elif CSR_INPUT == '3':
                         CSR_name = 'SPAREDES'
-                        break                        
+                        break
+                elif CSR_INPUT == '4':
+                        CSR_name = 'BSANCHEZ'
+                        break 
+                elif CSR_INPUT == '5':
+                        CSR_name = 'jehoug'
+                        break                         
                 else: 
                         raise ValueError("Entrada no válida. Por favor, seleccione 1, 2 o 3.")
                 
         except ValueError:
                 print("Entrada no válida. Por favor, seleccione 1, 2 o 3.")
+       
 
-
-""" 
-        '':['','', ''],
-        '':['','', ''],
-        '':['','', ''],
-        '':['','', ''],
-        '':['','', ''],
-        '':['','', ''],
-        '':['','', ''],
-        '':['','', ''],
-        
-
-               
-        {'accounting@journeyfreight.com':'apinquiries@journeyfreight.com'},"""
-        
-
-df_hoy, df_ayer, decision = CA.carga_archivos_excel()
+#df_hoy, df_ayer, decision = CA.carga_archivos_excel()
+df_hoy, df_ayer, decision = CA.carga_archivos_excel_nuevo()
 
 if decision == True:
         try:    
@@ -251,7 +243,7 @@ Thank you and have a great day! 🙂
                 ruta_attachment = os.path.join(directorio_actual,"..","attachments",Client_Name + " - NOA.pdf" )
                 correo.Attachments.Add(ruta_attachment)
                 correo.importance = 2
-                #correo.Send()
+                correo.Send()
                 #correo.Display()
                 if '@noa.triumphpay.com' in correos_englandlogistics: 
                         df_correos_enviar.at[indice, 'CA NOTES'] = f'{fecha_hoy} SENT to TP'
