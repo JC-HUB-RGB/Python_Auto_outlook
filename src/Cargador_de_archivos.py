@@ -5,7 +5,7 @@ from datetime import date, timedelta
 import shutil
 import time
 
-onedrive_path = os.path.expanduser('~\\OneDrive - C.R. England\\Documents')
+onedrive_path = os.path.expanduser('~\\OneDrive - C.R. England\\NOAs')
 date_name = date.weekday(date.today())
 directorio_actual = os.path.dirname(__file__)
 hoy = date.today()
@@ -138,12 +138,12 @@ def carga_archivos_excel_nuevo():
     fecha_hoy = fecha_hoy.strftime("%m-%d-%y")
     fecha_ayer = fecha_ayer.strftime("%m-%d-%y")
 
-    ruta_descargar_excel_hoy_sin_procesar = os.path.join(onedrive_path, "FILE NOA RAW", fecha_hoy + terminacion_archivo_sin_procesar)
-    ruta_descargar_excel_hoy_procesado = os.path.join(onedrive_path, fecha_hoy + terminacion_archivo_procesado)
+    ruta_descargar_excel_hoy_sin_procesar = os.path.join(onedrive_path,"FILE NOA RAW", fecha_hoy + terminacion_archivo_sin_procesar)
+    ruta_descargar_excel_hoy_procesado = os.path.join(onedrive_path, "FILE NOA PROCESSED", fecha_hoy + terminacion_archivo_procesado)
     ruta_excel_hoy_sin_procesar = os.path.join(directorio_actual,"..","data",fecha_hoy +terminacion_archivo_sin_procesar)
     ruta_excel_hoy_procesado = os.path.join(directorio_actual,"..","data",fecha_hoy+terminacion_archivo_procesado)
     ruta_excel_ayer_procesado = os.path.join(directorio_actual,"..","data",fecha_ayer + terminacion_archivo_procesado)
-    ruta_descargar_excel_ayer_procesado = os.path.join(onedrive_path, fecha_ayer + terminacion_archivo_procesado)
+    ruta_descargar_excel_ayer_procesado = os.path.join(onedrive_path, "FILE NOA PROCESSED", fecha_ayer + terminacion_archivo_procesado)
     ruta_debtors_file = os.path.join(onedrive_path,"Debtors Info.xlsx")
 
 #Lectura de archivos de excel
@@ -170,13 +170,13 @@ def carga_archivos_excel_nuevo():
             print("Archivo procesado de ayer encontrado en OneDrive, cargando el archivo...")
             time.sleep(5)
             df_ayer = pd.read_excel(ruta_descargar_excel_ayer_procesado)
-            bandera_carga = True
+            bandera_carga = 0
         else:
             if os.path.exists(ruta_excel_ayer_procesado):#Tienes el archivo de NOA de ayer procesado en carpeta data?
                 print("Archivo procesado de ayer no encontrado en OneDrive, copiando desde la carpeta data...")
                 shutil.copy2(ruta_excel_ayer_procesado, ruta_descargar_excel_ayer_procesado)
                 df_ayer = pd.read_excel(ruta_excel_ayer_procesado)
-                bandera_carga = True
+                bandera_carga = 0
             else:
                 print("No se encuentra el archivo procesado de ayer, por favor revise la carpeta data y agregalo manualmente")
                 time.sleep(5)
@@ -186,46 +186,20 @@ def carga_archivos_excel_nuevo():
     else:
         print("Previamente procesado por hoy, verificando si el archivo de debtors es mas reciente que el archivo procesado de hoy...")
         if os.path.getmtime(ruta_debtors_file) >= os.path.getmtime(ruta_descargar_excel_hoy_procesado):#El debtors file es mas reciente que el archivo de hoy?
-            print("Se detectaron modificaciones en el archivo de debtors, se cargará el archivo sin procesar de hoy y el archivo procesado de ayer...")
+            print("Se detectaron modificaciones en el archivo de debtors, se cargará el archivo procesado de hoy pero se modificara con los cambios en archivo de debtors")
 
+            df_hoy = pd.read_excel(ruta_descargar_excel_hoy_procesado)
+            bandera_carga = 1
+            df_ayer = None
 
-            if os.path.exists(ruta_descargar_excel_hoy_sin_procesar):#Tienes el archivo de NOA de hoy sin procesar en one drive?
-                print("Arhivo sin procesar de hoy encontrado en OneDrive, cargando el archivo...")
-                time.sleep(5)
-                df_hoy = pd.read_excel(ruta_descargar_excel_hoy_sin_procesar)
-            else:
-                if os.path.exists(ruta_excel_hoy_sin_procesar):#Tienes el archivo de NOA de hoy sin procesar en carpeta data?
-                    print("Archivo sin procesar de hoy no encontrado en OneDrive, copiando desde la carpeta data...")
-                    shutil.copy2(ruta_excel_hoy_sin_procesar, ruta_descargar_excel_hoy_sin_procesar)
-                    df_hoy = pd.read_excel(ruta_excel_hoy_sin_procesar)
-                else:
-                    print("No se encuentra el archivo sin procesar de hoy, por favor revise la carpeta FILE NOA RAW y agregalo manualmente")
-                    time.sleep(5)
-                    exit(1)
-
-
-            if os.path.exists(ruta_descargar_excel_ayer_procesado):#Tienes el archivo de NOA de ayer procesado en one drive?
-                print("Archivo procesado de ayer encontrado en OneDrive, cargando el archivo...")
-                time.sleep(5)
-                df_ayer = pd.read_excel(ruta_descargar_excel_ayer_procesado)
-                bandera_carga = True
-            else:
-                if os.path.exists(ruta_excel_ayer_procesado):#Tienes el archivo de NOA de ayer procesado en carpeta data?
-                    print("Archivo procesado de ayer no encontrado en OneDrive, copiando desde la carpeta data...")
-                    shutil.copy2(ruta_excel_ayer_procesado, ruta_descargar_excel_ayer_procesado)
-                    df_ayer = pd.read_excel(ruta_excel_ayer_procesado)
-                    bandera_carga = True
-                else:
-                    print("No se encuentra el archivo procesado de ayer, por favor revise la carpeta data y agregalo manualmente")
-                    time.sleep(5)
-                    exit(1)
+           
 
         else:
             
             print("No se encontraron modificaciones en el archivo de debtors, se utilizará el archivo procesado de hoy...")
             df_hoy = pd.read_excel(ruta_descargar_excel_hoy_procesado)
             df_ayer = None
-            bandera_carga = False
+            bandera_carga = 2
     return df_hoy, df_ayer, bandera_carga
 
     
