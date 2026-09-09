@@ -56,31 +56,34 @@ mapa_reemplazo_carriers = dict(zip(df_adaptacion_carriers['Unprocessed'], df_ada
 
 while True:
         try:
-                CSR_INPUT = input("Porfavor seleccione el CSR que desea procesar: 1.VGUERRERO 2.MPALMER 3.SPAREDES 4.dagarcia 5.jehoug 6.tcorona 7.AAGUILAR 8.VMANRIQUEZ\n")
+                CSR_INPUT = input("Porfavor seleccione el CSR que desea procesar: 1.SPAREDES 2.MPALMER 3.tcorona 4.AAGUILAR 5.jehoug 6.VGUERRERO 7.dagarcia 8.VMANRIQUEZ\n")
 
                 if CSR_INPUT == '1':
-                        CSR_name = 'VGUERRERO'
+                        CSR_name = 'SPAREDES'
                         break
                 elif CSR_INPUT == '2':
                         CSR_name = 'MPALMER'
                         break
                 elif CSR_INPUT == '3':
-                        CSR_name = 'SPAREDES'
+                        CSR_name = 'tcorona'
                         break
                 elif CSR_INPUT == '4':
-                        CSR_name = 'dagarcia'
+                        CSR_name = 'AAGUILAR'
                         break 
                 elif CSR_INPUT == '5':
                         CSR_name = 'jehoug'
                         break
                 elif CSR_INPUT == '6':
-                        CSR_name = 'tcorona'
+                        CSR_name = 'VGUERRERO'
                         break
                 elif CSR_INPUT == '7':
-                        CSR_name = 'AAGUILAR'
+                        CSR_name = 'dagarcia'
                         break
                 elif CSR_INPUT == '8':
                         CSR_name = 'VMANRIQUEZ'
+                        break
+                elif CSR_INPUT == '9':
+                        CSR_name = 'BSANCHEZ'
                         break
 
                 else: 
@@ -88,9 +91,9 @@ while True:
                 
         except ValueError:
                 print("Entrada no válida. Por favor, seleccione 1, 2, 3, 4, 5, 6 o 7.")
-       
 
-#df_hoy, df_ayer, decision = CA.carga_archivos_excel()
+
+       
 df_hoy, df_ayer, decision = CA.carga_archivos_excel_nuevo()
 
 if decision == 0:
