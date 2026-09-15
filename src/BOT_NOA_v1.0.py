@@ -40,7 +40,7 @@ ruta_descargar_excel_hoy_procesado = os.path.join(onedrive_path_noas, "FILE NOA 
 
 """"Dataframes y variables globales"""
 
-df_columns_to_drop = ['NOA Rec Date', 'NOA Assigment', 'NOA Sent', 'NOA Sent User','Debtor NOA Document','CSR.1', 'Office','Notice', 'Notice Contact Email','NOA Entered Date', 'Last Inv Date', 'Last Inv #', 'First Inv Date', 'Relationship Age', 'First Funded', 'Client Age', 'Funded Balance', 'Non Funded Balance']
+df_columns_to_drop = ['NOA Rec Date', 'NOA Assigment', 'NOA Sent', 'NOA Sent User','Debtor NOA Document','CSR.1', 'Office','Notice', 'Notice Contact Email','NOA Entered Date', 'Last Inv #', 'First Inv Date', 'Relationship Age', 'First Funded', 'Client Age', 'Funded Balance', 'Non Funded Balance']
 Palabras_Buscar = ["noa", "doesnt verify", "@noa.triumphpay", "web", "triumphpay", "website", "use triumph pay", "triumph", "tp", "epay"]
 nombres_no_touch = ["avensis energy services, llc", "metro parcel & freight inc", "mvk transport corporation", "cmd energy, llc"]
 
@@ -56,13 +56,13 @@ mapa_reemplazo_carriers = dict(zip(df_adaptacion_carriers['Unprocessed'], df_ada
 
 while True:
         try:
-                CSR_INPUT = input("Porfavor seleccione el CSR que desea procesar: 1.SPAREDES 2.MPALMER 3.tcorona 4.AAGUILAR 5.jehoug 6.VGUERRERO 7.dagarcia 8.VMANRIQUEZ\n")
+                CSR_INPUT = input("Porfavor seleccione el CSR que desea procesar: 1.SPAREDES 2.DMONTANO 3.tcorona 4.AAGUILAR 5.jehoug 6.VGUERRERO 7.dagarcia 8.VMANRIQUEZ\n")
 
                 if CSR_INPUT == '1':
                         CSR_name = 'SPAREDES'
                         break
                 elif CSR_INPUT == '2':
-                        CSR_name = 'MPALMER'
+                        CSR_name = 'DMONTANO'
                         break
                 elif CSR_INPUT == '3':
                         CSR_name = 'tcorona'
