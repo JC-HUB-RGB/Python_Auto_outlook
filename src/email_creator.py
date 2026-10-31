@@ -80,15 +80,15 @@ def enviar_correos(df_correos_enviar, fecha_hoy, onedrive_path):
                     #correo.Display()
                     if '@noa.triumphpay.com' in correos: 
                             df_correos_enviar.at[indice, 'CA NOTES'] = f'{fecha_hoy} SENT to TP'
-                            #time.sleep(2)
+                            time.sleep(2)
                             print(f"Correo enviado a Triumphpay")
                     if 'website' in nota_warning and not debtor_not_processed:
                             df_correos_enviar.at[indice, 'CA NOTES'] = f'{fecha_hoy} SENT to WEB'
-                            #time.sleep(2)
+                            time.sleep(2)
                             print(f"Correo enviado a WEB")
                     else:
                             df_correos_enviar.at[indice, 'CA NOTES'] = f'{fecha_hoy} SENT'
-                            #time.sleep(2)
+                            time.sleep(2)
                     for col_intentos in ['1st attempt','2nd attempt','3rd attempt']:
                         valor_raw = df_correos_enviar.at[indice, col_intentos]
                         valor_columna_intento =str(valor_raw).strip() 
@@ -97,7 +97,6 @@ def enviar_correos(df_correos_enviar, fecha_hoy, onedrive_path):
 
                             #print("Usando loc:", df_correos_enviar.loc[indice, col_intentos])
                             break
-                    #time.sleep(2)
                             #input("Press Enter to continue to the next email...")
                     
 
