@@ -100,7 +100,11 @@ if decision == 0:
                 print("Columnas eliminadas")
                 try:
                         df_hoy.insert(9, 'CA NOTES', '')
-                        print("Columna 'CA NOTES' insertada")
+                        df_hoy.insert(14, '1st attempt', '')
+                        df_hoy.insert(16, '2nd attempt', '')
+                        df_hoy.insert(18, '3rd attempt', '')
+                                                                                                
+                        print("Columna 'CA NOTES' insertada y columnas de attemtps insertadas")
                 except Exception as e :
                         print("La columna 'CA NOTES' ya existe. Continuando con el proceso...")
 
@@ -139,9 +143,11 @@ if decision == 0:
                 exit(1)
 
         """Realizar merge entre df_hoy y df_ayer utilizando 'Last PO #' como clave"""
+        columnas_a_copiar = ['CA NOTES', '1st attempt', '2nd attempt', '3rd attempt']
         try:
-                mapeo_notas = df_ayer.set_index('Last PO #')['CA NOTES']
-                df_hoy['CA NOTES'] = df_hoy['Last PO #'].map(mapeo_notas)
+            for columna in columnas_a_copiar:    
+                mapeo_notas = df_ayer.set_index('Last PO #')[columna]
+                df_hoy[columna] = df_hoy['Last PO #'].map(mapeo_notas)
         except Exception as e:
                 print(f"Error al realizar el merge: {e}")
                 exit(1)
@@ -202,7 +208,8 @@ elif decision == 2:
 
 EC.enviar_correos(df_correos_enviar, fecha_hoy, onedrive_path)
 
-df_final = df_hoy['Last PO #'].map(df_correos_enviar.set_index('Last PO #')['CA NOTES'])
-df_hoy['CA NOTES'] = df_final.combine_first(df_hoy['CA NOTES'])
+for col_actualizar in ['CA NOTES', '1st attempt', '2nd attempt', '3rd attempt']:
+    df_final = df_hoy['Last PO #'].map(df_correos_enviar.set_index('Last PO #')[col_actualizar])
+    df_hoy[col_actualizar] = df_final.combine_first(df_hoy[col_actualizar])
 Guardar_archivo_excel(df_hoy,ruta_excel_hoy_procesado)
 shutil.copy2(ruta_excel_hoy_procesado,ruta_descargar_excel_hoy_procesado)

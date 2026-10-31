@@ -23,19 +23,19 @@ def enviar_correos(df_correos_enviar, fecha_hoy, onedrive_path):
             nota_attention = str(fila['Attention Note']).lower()
             nota_warning = str(fila['Warning Note']).lower()
             correos_no_touch = str(fila['Client Name']).lower()
-            correos_englandlogistics = str(fila['Debtor Email Address']).lower()
+            correos = str(fila['Debtor Email Address']).lower()
 
             """ciclos para verificar el valor de las celdas no tiene palabras de atencion."""
             tiene_nombre_no_touch = any(palabra in correos_no_touch for palabra in nombres_no_touch)
             tiene_palabra_attention = any(palabra in nota_attention for palabra in Palabras_Buscar)
             tiene_palabra_warning = any(palabra in nota_warning for palabra in Palabras_Buscar)
-            
+            debtor_not_processed = not 'changed on debtors file' in nota_attention
             correo_nulo = pd.isna(fila['Debtor Email Address'])
             
 
             print(f"Procesando correo para {Client_Name} , con la carga {PO_Number}")
 
-            if tiene_palabra_attention or tiene_palabra_warning:
+            if tiene_palabra_attention or tiene_palabra_warning and debtor_not_processed:
 
                     df_correos_enviar.at[indice, 'CA NOTES'] = 'Checar Manualmente'
                     print(f"Correo no enviado, checar manualmente")
@@ -47,7 +47,7 @@ def enviar_correos(df_correos_enviar, fecha_hoy, onedrive_path):
                     #time.sleep(5)
                     continue
 
-            elif 'debtors@englandlogistics.com' in correos_englandlogistics or 'paperwork@englandlogistics.com' in correos_englandlogistics or '@englandlogistics.com' in correos_englandlogistics:
+            elif 'debtors@englandlogistics.com' in correos or 'paperwork@englandlogistics.com' in correos or '@englandlogistics.com' in correos:
                     df_correos_enviar.at[indice, 'CA NOTES'] = 'Correo de England Logistics, checar manualmente'
                     #time.sleep(5)
                     print(f"Correo no enviado, checar manualmente")
@@ -77,15 +77,29 @@ def enviar_correos(df_correos_enviar, fecha_hoy, onedrive_path):
                     correo.Attachments.Add(ruta_attachment)
                     correo.importance = 2
                     #correo.Send()
-                    correo.Display()
-                    if '@noa.triumphpay.com' in correos_englandlogistics: 
+                    #correo.Display()
+                    if '@noa.triumphpay.com' in correos: 
                             df_correos_enviar.at[indice, 'CA NOTES'] = f'{fecha_hoy} SENT to TP'
-                            time.sleep(2)
+                            #time.sleep(2)
                             print(f"Correo enviado a Triumphpay")
+                    if 'website' in nota_warning and not debtor_not_processed:
+                            df_correos_enviar.at[indice, 'CA NOTES'] = f'{fecha_hoy} SENT to WEB'
+                            #time.sleep(2)
+                            print(f"Correo enviado a WEB")
                     else:
                             df_correos_enviar.at[indice, 'CA NOTES'] = f'{fecha_hoy} SENT'
-                            time.sleep(2)
+                            #time.sleep(2)
+                    for col_intentos in ['1st attempt','2nd attempt','3rd attempt']:
+                        valor_raw = df_correos_enviar.at[indice, col_intentos]
+                        valor_columna_intento =str(valor_raw).strip() 
+                        if pd.isna(valor_raw) or valor_columna_intento in ['', 'nan', 'None']:
+                            df_correos_enviar.at[indice, col_intentos] = f'{fecha_hoy} SENT to {Email_Destinatario}'
+
+                            #print("Usando loc:", df_correos_enviar.loc[indice, col_intentos])
+                            break
+                    #time.sleep(2)
                             #input("Press Enter to continue to the next email...")
+                    
 
                 
             except pywintypes.com_error as e:
