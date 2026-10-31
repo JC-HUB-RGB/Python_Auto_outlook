@@ -16,7 +16,7 @@ terminacion_archivo_sin_procesar = "_ECS_Factoring_NOARecdDate.xlsx"
 #ruta_descargar_excel_ayer = os.path.join(onedrive_path, fecha_ayer + terminacion_archivo_procesado)
 #ruta_excel_ayer_sin_procesar = os.path.join(directorio_actual,"..","data",fecha_ayer +terminacion_archivo_sin_procesar)
 
-def carga_archivos_excel_nuevo():
+def carga_archivos_excel():
     #Seleccionador de fecha para cargar archivos de excel
     date_name = date.weekday(date.today())
     hoy = date.today()

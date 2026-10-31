@@ -7,7 +7,7 @@ from datetime import date
 import shutil
 import time
 import tkinter as tk
-import Cargador_de_archivos as CA
+import archives_loader as CA
 import email_creator as EC
 
 """Info general"""
@@ -91,9 +91,9 @@ while True:
 
 
        
-df_hoy, df_ayer, decision = CA.carga_archivos_excel_nuevo()
+df_hoy, df_ayer, decision = CA.carga_archivos_excel()
 
-if decision == 0:
+if decision == 0: #no se encontro un archivo procesado de hoy
         try:    
                 """"Adaptacion del df_hoy: eliminar columnas, insertar columna 'CA NOTES' """
                 df_hoy.drop(columns=df_columns_to_drop, axis='columns', inplace=True, errors='ignore')
@@ -104,11 +104,11 @@ if decision == 0:
                         df_hoy.insert(16, '2nd attempt', '')
                         df_hoy.insert(18, '3rd attempt', '')
                                                                                                 
-                        print("Columna 'CA NOTES' insertada y columnas de attemtps insertadas")
+                        print("Columnas 'CA NOTES', '1st attempt', '2nd attempt', '3rd attempt' insertadas correctamente")
                 except Exception as e :
                         print("La columna 'CA NOTES' ya existe. Continuando con el proceso...")
 
-                print("Creacion del nuevo archivo con la columna 'CA NOTES' sin errores")
+                print("Creacion del nuevo archivo con las columnas 'CA NOTES', '1st attempt', '2nd attempt', '3rd attempt' sin errores")
                 try:
                         for indice, fila in df_adaptacion_carriers.iterrows():
                                 carrier_real = fila['Unprocessed']
@@ -120,9 +120,6 @@ if decision == 0:
 
 
                 print("Reemplazo de nombres de Carriers completado")
-                time.sleep(5)
-
-
                 df_ayer = df_ayer.drop_duplicates(subset=['Last PO #'], keep='last')
                 df_hoy = df_hoy.drop_duplicates(subset=['Last PO #'], keep='last')
                 try:
@@ -139,7 +136,7 @@ if decision == 0:
                 #print(df_hoy.head()) 
 
         except Exception as e:
-                print(f"Ocurrió un error inesperado: {e}")
+                print(f"Ocurrió un error inesperado en la adaptacion del archivo de hoy: {e}")
                 exit(1)
 
         """Realizar merge entre df_hoy y df_ayer utilizando 'Last PO #' como clave"""
@@ -158,7 +155,11 @@ if decision == 0:
 
                 Condicion1 = df_hoy['CSR'] == CSR_name
                 Condicion2 = df_hoy['CA NOTES'].isna()
-                df_correos_enviar = df_hoy[(Condicion1) & (Condicion2)].copy()
+                Condicion_Edad = df_hoy['Relationship Age'].isin([7, 14, 21])
+                Condicion_1st = ~df_hoy['1st attempt'].astype(str).str.contains(fecha_hoy, na=False)
+                Condicion_2nd = ~df_hoy['2nd attempt'].astype(str).str.contains(fecha_hoy, na=False)
+                Condicion_3rd = ~df_hoy['3rd attempt'].astype(str).str.contains(fecha_hoy, na=False)
+                df_correos_enviar = df_hoy[Condicion1 & (Condicion2 | Condicion_Edad) & (Condicion_1st & Condicion_2nd & Condicion_3rd)].copy()
                 size = df_correos_enviar['Last PO #'].size
                 print(f'Existen {size} correos por enviar')
                 time.sleep(10)
@@ -166,7 +167,7 @@ if decision == 0:
                 print(f"Error al filtrar los registros para el correo: {e}")
                 exit(1)
 
-elif decision == 1:
+elif decision == 1: #se econtro un archivo procesado de hoy, pero el debtors file tiene cambios.
                 print("Reemplazo de texto específico completado")
                 try:
                         for indice, fila in df_adaptacion_deudores.iterrows():
@@ -183,25 +184,33 @@ elif decision == 1:
                 try:
                         Condicion1 = df_hoy['CSR'] == CSR_name
                         Condicion2 = df_hoy['CA NOTES'].isna()
-                        df_correos_enviar = df_hoy[(Condicion1) & (Condicion2)].copy()
+                        Condicion_Edad = df_hoy['Relationship Age'].isin([7, 14, 21])
+                        Condicion_1st = ~df_hoy['1st attempt'].astype(str).str.contains(fecha_hoy, na=False)
+                        Condicion_2nd = ~df_hoy['2nd attempt'].astype(str).str.contains(fecha_hoy, na=False)
+                        Condicion_3rd = ~df_hoy['3rd attempt'].astype(str).str.contains(fecha_hoy, na=False)
+                        df_correos_enviar = df_hoy[Condicion1 & (Condicion2 | Condicion_Edad) & (Condicion_1st & Condicion_2nd & Condicion_3rd)].copy()
                         size = df_correos_enviar['Last PO #'].size
                         print(f'Existen {size} correos por enviar')
-                        time.sleep(5)
+                        time.sleep(10)
                 except Exception as e:
                         print(f"Error al filtrar los registros para el correo: {e}")
                         exit(1)
 
         
-elif decision == 2:
+elif decision == 2: #se encontro un archivo procesado de hoy, y el debtors file no tiene cambios.
         """FILTRO DE REGISTROS PARA ENVIAR CORREO"""
         try:    
 
                 Condicion1 = df_hoy['CSR'] == CSR_name
                 Condicion2 = df_hoy['CA NOTES'].isna()
-                df_correos_enviar = df_hoy[(Condicion1) & (Condicion2)].copy()
+                Condicion_Edad = df_hoy['Relationship Age'].isin([7, 14, 21])
+                Condicion_1st = ~df_hoy['1st attempt'].astype(str).str.contains(fecha_hoy, na=False)
+                Condicion_2nd = ~df_hoy['2nd attempt'].astype(str).str.contains(fecha_hoy, na=False)
+                Condicion_3rd = ~df_hoy['3rd attempt'].astype(str).str.contains(fecha_hoy, na=False)
+                df_correos_enviar = df_hoy[Condicion1 & (Condicion2 | Condicion_Edad) & (Condicion_1st & Condicion_2nd & Condicion_3rd)].copy()
                 size = df_correos_enviar['Last PO #'].size
                 print(f'Existen {size} correos por enviar')
-                time.sleep(5)
+                time.sleep(10)
         except Exception as e:
                 print(f"Error al filtrar los registros para el correo: {e}")
                 exit(1)
