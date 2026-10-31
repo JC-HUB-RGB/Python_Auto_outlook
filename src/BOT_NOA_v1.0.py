@@ -7,8 +7,8 @@ from datetime import date
 import shutil
 import time
 import tkinter as tk
-import pywintypes
 import Cargador_de_archivos as CA
+import email_creator as EC
 
 """Info general"""
 onedrive_path_noas = os.path.expanduser('~\\OneDrive - C.R. England\\NOAs')
@@ -39,10 +39,7 @@ ruta_excel_hoy_procesado = os.path.join(directorio_actual,"..","data",fecha_hoy+
 ruta_descargar_excel_hoy_procesado = os.path.join(onedrive_path_noas, "FILE NOA PROCESSED", fecha_hoy + terminacion_archivo_procesado)
 
 """"Dataframes y variables globales"""
-
-df_columns_to_drop = ['NOA Rec Date', 'NOA Assigment', 'NOA Sent', 'NOA Sent User','Debtor NOA Document','CSR.1', 'Office','Notice', 'Notice Contact Email','NOA Entered Date', 'Last Inv #', 'First Inv Date', 'Relationship Age', 'First Funded', 'Client Age', 'Funded Balance', 'Non Funded Balance']
-Palabras_Buscar = ["noa", "doesnt verify", "@noa.triumphpay", "web", "triumphpay", "website", "use triumph pay", "triumph", "tp", "epay"]
-nombres_no_touch = ["avensis energy services, llc", "metro parcel & freight inc", "mvk transport corporation", "cmd energy, llc"]
+df_columns_to_drop = ['NOA Rec Date', 'NOA Assigment', 'NOA Sent','Last Inv Date', 'NOA Sent User','Debtor NOA Document','CSR.1', 'Office','Notice', 'Notice Contact Email','NOA Entered Date', 'Last Inv #', 'First Inv Date', 'First Funded', 'Client Age', 'Funded Balance', 'Non Funded Balance']
 
 
 """Definicion de funciones"""
@@ -203,93 +200,7 @@ elif decision == 2:
                 print(f"Error al filtrar los registros para el correo: {e}")
                 exit(1)
 
-"""Armador de correos"""
-for indice, fila in df_correos_enviar.iterrows():
-
-        Client_Name = fila['Client Name']
-        MC_number = fila['MCNumber']
-        PO_Number = fila['Last PO #']
-        Email_Destinatario = fila['Debtor Email Address']       
-        correo = outlook.CreateItem(0)
-
-        """Se convierte los valores de las celdas en minusuculas"""
-        
-        nota_attention = str(fila['Attention Note']).lower()
-        nota_warning = str(fila['Warning Note']).lower()
-        correos_no_touch = str(fila['Client Name']).lower()
-        correos_englandlogistics = str(fila['Debtor Email Address']).lower()
-
-        """ciclos para verificar el valor de las celdas no tiene palabras de atencion."""
-        tiene_nombre_no_touch = any(palabra in correos_no_touch for palabra in nombres_no_touch)
-        tiene_palabra_attention = any(palabra in nota_attention for palabra in Palabras_Buscar)
-        tiene_palabra_warning = any(palabra in nota_warning for palabra in Palabras_Buscar)
-        
-        correo_nulo = pd.isna(fila['Debtor Email Address'])
-        
-
-        print(f"Procesando correo para {Client_Name} , con la carga {PO_Number}")
-
-        if tiene_palabra_attention or tiene_palabra_warning:
-
-                df_correos_enviar.at[indice, 'CA NOTES'] = 'Checar Manualmente'
-                print(f"Correo no enviado, checar manualmente")
-                #time.sleep(5)
-                continue  # Si se encuentra alguna de las palabras en las notas, se omite el envío del correo para este registro
-                
-        elif correo_nulo :
-                df_correos_enviar.at[indice, 'CA NOTES'] = 'NO EMAIL'
-                #time.sleep(5)
-                continue
-
-        elif 'debtors@englandlogistics.com' in correos_englandlogistics or 'paperwork@englandlogistics.com' in correos_englandlogistics or '@englandlogistics.com' in correos_englandlogistics:
-                df_correos_enviar.at[indice, 'CA NOTES'] = 'Correo de England Logistics, checar manualmente'
-                #time.sleep(5)
-                print(f"Correo no enviado, checar manualmente")
-                continue
-        
-        elif tiene_nombre_no_touch:
-                df_correos_enviar.at[indice, 'CA NOTES'] = 'Cliente no touch'
-                #time.sleep(5)
-                print(f"No touch cliente, correo no enviado")
-                continue
-        try:
-                correo.To = Email_Destinatario
-                correo.Subject = f"PLEASE REPLY NOA confirmation required {Client_Name} // MC {MC_number} // Load {PO_Number}"
-                correo.Body = f"""
-Good morning
-
-                                
-Attached you'll find our NOA for the carrier. Please confirm when received.
-
-                        
-Thank you and have a great day! 🙂
-
-                        
-*Please note if you are seeing this message again, it is because we have not received confirmation."""
-        
-                ruta_attachment = os.path.join(onedrive_path,"Documents","NOA",Client_Name + " - NOA.pdf" )
-                correo.Attachments.Add(ruta_attachment)
-                correo.importance = 2
-                correo.Send()
-                #correo.Display()
-                if '@noa.triumphpay.com' in correos_englandlogistics: 
-                        df_correos_enviar.at[indice, 'CA NOTES'] = f'{fecha_hoy} SENT to TP'
-                        time.sleep(2)
-                        print(f"Correo enviado a Triumphpay")
-                else:
-                        df_correos_enviar.at[indice, 'CA NOTES'] = f'{fecha_hoy} SENT'
-                        time.sleep(2)
-                        #input("Press Enter to continue to the next email...")
-
-              
-        except pywintypes.com_error as e:
-                print(f"attachment not found for {Client_Name}: {e}")
-                df_correos_enviar.at[indice, 'CA NOTES'] = 'File not found'
-                continue
-        except Exception as e:
-                print(f"Error al enviar el correo para {Client_Name}: {e}")
-                df_correos_enviar.at[indice, 'CA NOTES'] = 'Error al enviar el correo'
-                continue
+EC.enviar_correos(df_correos_enviar, fecha_hoy, onedrive_path)
 
 df_final = df_hoy['Last PO #'].map(df_correos_enviar.set_index('Last PO #')['CA NOTES'])
 df_hoy['CA NOTES'] = df_final.combine_first(df_hoy['CA NOTES'])
