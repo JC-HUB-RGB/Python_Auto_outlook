@@ -76,7 +76,7 @@ def enviar_correos(df_correos_enviar, fecha_hoy, onedrive_path):
                     ruta_attachment = os.path.join(onedrive_path,"Documents","NOA",Client_Name + " - NOA.pdf" )
                     correo.Attachments.Add(ruta_attachment)
                     correo.importance = 2
-                    #correo.Send()
+                    correo.Send()
                     #correo.Display()
                     if '@noa.triumphpay.com' in correos: 
                             df_correos_enviar.at[indice, 'CA NOTES'] = f'{fecha_hoy} SENT to TP'
