@@ -159,7 +159,7 @@ if decision == 0: #no se encontro un archivo procesado de hoy
                 Condicion_1st = ~df_hoy['1st attempt'].astype(str).str.contains(fecha_hoy, na=False)
                 Condicion_2nd = ~df_hoy['2nd attempt'].astype(str).str.contains(fecha_hoy, na=False)
                 Condicion_3rd = ~df_hoy['3rd attempt'].astype(str).str.contains(fecha_hoy, na=False)
-                df_correos_enviar = df_hoy[Condicion1 & (Condicion2 | Condicion_Edad) & (Condicion_1st & Condicion_2nd & Condicion_3rd)].copy()
+                df_correos_enviar = df_hoy[(Condicion1 & Condicion2) | Condicion_Edad].copy()#& (Condicion_1st & Condicion_2nd & Condicion_3rd)].copy()
                 size = df_correos_enviar['Last PO #'].size
                 print(f'Existen {size} correos por enviar')
                 time.sleep(10)
@@ -188,7 +188,7 @@ elif decision == 1: #se econtro un archivo procesado de hoy, pero el debtors fil
                         Condicion_1st = ~df_hoy['1st attempt'].astype(str).str.contains(fecha_hoy, na=False)
                         Condicion_2nd = ~df_hoy['2nd attempt'].astype(str).str.contains(fecha_hoy, na=False)
                         Condicion_3rd = ~df_hoy['3rd attempt'].astype(str).str.contains(fecha_hoy, na=False)
-                        df_correos_enviar = df_hoy[Condicion1 & (Condicion2 | Condicion_Edad) & (Condicion_1st & Condicion_2nd & Condicion_3rd)].copy()
+                        df_correos_enviar = df_hoy[(Condicion1 & Condicion2) | Condicion_Edad].copy()#& (Condicion_1st & Condicion_2nd & Condicion_3rd)].copy()
                         size = df_correos_enviar['Last PO #'].size
                         print(f'Existen {size} correos por enviar')
                         time.sleep(10)
@@ -207,7 +207,7 @@ elif decision == 2: #se encontro un archivo procesado de hoy, y el debtors file 
                 Condicion_1st = ~df_hoy['1st attempt'].astype(str).str.contains(fecha_hoy, na=False)
                 Condicion_2nd = ~df_hoy['2nd attempt'].astype(str).str.contains(fecha_hoy, na=False)
                 Condicion_3rd = ~df_hoy['3rd attempt'].astype(str).str.contains(fecha_hoy, na=False)
-                df_correos_enviar = df_hoy[Condicion1 & (Condicion2 | Condicion_Edad) & (Condicion_1st & Condicion_2nd & Condicion_3rd)].copy()
+                df_correos_enviar = df_hoy[(Condicion1 & Condicion2) | Condicion_Edad].copy()#& (Condicion_1st & Condicion_2nd & Condicion_3rd)].copy()
                 size = df_correos_enviar['Last PO #'].size
                 print(f'Existen {size} correos por enviar')
                 time.sleep(10)
